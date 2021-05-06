@@ -1,0 +1,5 @@
+"Bottle ID","Description of contents","Tare mass (g)","Total mass (g)","Sludge mass (g)","Inoculum mass (g)","Headspace volume (mL)"
+id,descrip,tare.g,m.tot.g,m.sludge.g,m.inoc.g,vol.hs.ml
+D,sludge,256.29,408.05,52.29,99.48,172.2
+E,sludge,257.25,408.13,49.46,101.43,173.1
+F,sludge,256.61,410.54,53.63,100.29,170.1
