@@ -1,0 +1,15 @@
+# LaTeX intermediates
+*.tex
+*.blg
+*.bbl
+*.log
+*.aux
+*.out
+*.toc
+*.synctex.gz
+# R
+*.Rout
+*.RData
+# Directories
+/cache
+/figure
