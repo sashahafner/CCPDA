@@ -626,6 +626,27 @@ We can say then, that at the 95\% confidence, any difference between the methods
 That is useful!
 If we want more information or a better estimate of any probable difference between the methods, we would need to carry out additional experiments.
 
+Could this analysis have been done using a spreadsheet?
+Yes, but with some difficulty, and an unforunate lack of clarity and reproducibility.
+In LibreOffice Calc, it is necessary to first calculate the response variable (relative difference), as in the R code above, but then to add columns with ``dummy variables'' for substrate.
+This is shown in the figure below (Fig. \ref{fig:bmpspreadsheet1}), but also in the file ``BMP\_comp.ods'' in the spreadsheets directory.
+
+\begin{figure}
+\includegraphics[width = 150mm]{images/BMP_comp_spreadsheet.png}
+\caption{BMP comparison data ready for analysis in LibreOffice Calc (a spreadsheet program).}
+\label{fig:BMPspreadsheet1}
+\end{figure}
+
+To actually fit the regression model, the ``Data'' menu is selected, then ``Statistics'', and finally, ``Regression''.
+Variables and options are selected as shown below (Fig. \ref{fig:bmpspreadsheetanalysis}).
+
+\begin{figure}
+\includegraphics[width = 70mm]{images/BMP_comp_spreadsheet_analysis.png}
+\caption{Inputs required for analysis of the BMP data in LibreOffice Calc.}
+\label{fig:BMPspreadsheetanalysis}
+\end{figure}
+
+
 \section{Example 3: VOC emission from silage}
 The data in \texttt{ethanol\_emis.xlxs} are on ethanol emission from maize silage (fermented cattle feed) measured in a simple wind tunnel.
 Emission was measured from 15 cm thick samples of silage taken from bunker silos, where silage is stored for weeks or months.
