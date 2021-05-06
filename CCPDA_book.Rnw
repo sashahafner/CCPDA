@@ -53,8 +53,8 @@ rm(list = ls())
 \section{Orientation}
 Data analysis is essential in engineering research and practice. 
 But the topic is confusing to many, and inaccurate or completely incorrect conclusions, wasted effort, and miserable students are just too common.
-This short book is a concise introduction to data analysis meant to address some of these problems.
-In it I try to explain and apply some core concepts that will, I hope, make data analysis easier and more useful for students in engineering or a related field of science.
+This short book provides a concise introduction to data analysis from a very practical perspective.
+In it I try to explain and demonstrate some core concepts of data analysis and also data entry, manipulation, and related activities.
 
 Much of this book is on relatively practical ``nuts and bolts'' of data analysis--including structuring your data, making data analysis reproducible, and the importance of visualization through plots.
 Where statistical models are covered, I focus on a single relatively simple set that can be used for many types of analyses: classical linear models.
@@ -335,7 +335,7 @@ The list of questions below is not explained in great detail here, but it is ref
   \item Do you have replication, and it is the right type? Are the observations independent, apart from whatever factor you would like to test? 
   \item Are there systematic errors present in your data that could affect the results? If all obserations have the same systematic error (e.g., you made the measurements instead of your more experienced colleague) there is generally no reason to expect an effect on a comparison. If systematic error is associated with the experimental factor, however, you have a problem that statistical models cannot (easily) solve.
   \item Is your experimental factor continuous or categorical by nature? The answer determines the way you should analyze your data and interpret results.
-  \item What type of a relationship do you expect (or see) between your treatments and the response variable(s)? How can your approach to data analysis accommodate this?
+  \item What type of a relationship do you expect (or see) between your treatments and the response variable(s)? How can your approach to data analysis accommodate this? Are transformations needed? Polynomials?
 \end{enumerate}
 
 \section{Classical linear models}
@@ -344,6 +344,38 @@ The only type of statistical method I will present in this book is linear regres
 I've selected this method because I think it is extremely flexible and useful, and because I use it very frequently.
 In this short book, I don't have the option of including many different approaches, but another reason to focus on a single method is to use it to support what I think is an important piece of advice: avoid using statistical methods that you do not understand.
 It is likely that many statistical analyses you will need to do can be done using classical linear models, and it is relatively easy to understanding and apply.
+
+In R, several classical statistical models can be implemented using one function: \texttt{lm} (for linear model).
+The \texttt{lm} function can be used for simple and multiple linear regression, analysis of variance (ANOVA), and analysis of covariance (ANCOVA). 
+With data transformations and polynomials, it can easily handle (some) non-normal error distributions and non-linear responses.
+
+The arguments for \texttt{lm} are
+
+<<>>= 
+args(lm) 
+@
+
+The first argument, \texttt{formula}, is where you specify the basic structure of the statistical model.
+This approach is used in other R functions as well, such as \texttt{glm}, \texttt{gam}, and others.
+Venables et al. has a useful list of example formulas--some examples are repeated below.
+In these examples, the variables \texttt{x}, \texttt{y}, and \texttt{z} are continuous, and \texttt{A}, \texttt{B}, and \texttt{C} are factors.
+
+\begin{tabbing}
+\hspace*{4.5cm} \= \hspace{1cm} \= \\
+\texttt{y \string~ x   } \>   Simple linear regression of y on x \\
+\texttt{y \string~ x + z   } \>   Multiple regression of y on x and z \\
+\texttt{y \string~ poly(x, 2)   } \>   Second order orthogonal polynomial regression \\
+\texttt{y \string~ x + I(x\string^2)}   \>   Second order polynomial regression \\
+\texttt{y \string~ A   } \>   Single factor ANOVA \\
+\texttt{y \string~ A + B   } \>   Two-factor ANOVA \\
+\texttt{y \string~ A + B + A:B   } \>   Two-factor ANOVA with interaction \\
+\texttt{y \string~ A*B   } \>   Two-factor ANOVA with interaction \\
+\texttt{y \string~ (A + B + C)\string^2   } \>   Three-factor ANOVA with all first-order interactions \\
+\texttt{y \string~ (A + B + C)\string^2 - B:C  } \> As above but without B:C interaction \\
+\texttt{y \string~ A + x   } \>   ANCOVA \\
+\end{tabbing}
+
+Of course all this applies to R, but formulas in Python are similar, and even for spreadsheet programs, the concepts still apply.
 
 When you apply classical linear models, you should be aware of the assumptions that are employed every time model coefficients, \textit{p}-values, or confidence intervals are returned.
 
@@ -372,11 +404,11 @@ I will use R to plot the data.
 First, let's load a handy function for summarizing datasets.\footnote{You can download this function from \url{https://github.com/sashahafner/jumbled}.}
 
 <<>>=
-source("../functions/dfsumm.R")
+source("functions/dfsumm.R")
 @
 
 <<>>=
-wl <- read.csv('../data/wetlands.csv')
+wl <- read.csv('data/wetlands.csv')
 @
 
 <<>>=
@@ -499,7 +531,7 @@ We were interested in determining if the method gave different results from othe
 Let's get the data.
 
 <<>>=
-bb <- read.csv('../data/BMP_comp.csv')
+bb <- read.csv('data/BMP_comp.csv')
 @
 
 <<>>=
@@ -615,7 +647,7 @@ library(readxl)
 Read in the data.
 
 <<>>=
-et <- read_excel("../data/ethanol_emis.xlsx", skip = 1)
+et <- read_excel("data/ethanol_emis.xlsx", skip = 1)
 @
 
 Check data
