@@ -186,7 +186,7 @@ For complex analyses, or at least after you have a little experience with a new 
 I like to use Git and GitHub for this, but there are alternatives.
 These are especially useful if you collaborate with others on data analysis.
 
-Spreadsheets do not facilite repeating or checking any of the steps listed above, but in particular, data manipulation.
+Spreadsheets do not facilite repeating or checking any of the steps listed above, but this problem is especially accute for manual data manipulation.
 For calculations underlying data processing and analysis, sure, one could find the formulas underlying the calculations, and follow the cell references to check everything. 
 But there are so many damn cells, each with its own formula!
 Code, in contrast, is concise by its nature. 
@@ -198,13 +198,13 @@ This is helpful for files used for only data entry as well--if you delete or cor
 
 \section{Uses and abuses of statistics}
 The term ``statistics'' can mean a few things, but here I mean statistical methods and statistical models used for data analysis.
-Here I am I also mean \textit{inferential} statistics, i.e., methods and models meant to make some kind of inference.
+Here I am also focused on \textit{inferential} statistics, i.e., methods and models meant to make some kind of inference.
 For example, you might like to know if your new sludge treatment method improves biogas yields.
 In some cases statistics can help answer a question like this, and in others, they are worse than useless.
-To help understand why, it can be useful to think about some basic concepts in inferential statistics.
+To help understand why, it can be useful to think about some basic concepts in inferential statistics (box 1).
 
 \fbox{\begin{minipage}{40em}
-  \textbf{Inferential statistics: the basic concept} \\
+  \textbf{1. Inferential statistics: the basic concept} \\
   Inferential statistical methods are based comparing a \textit{difference} in some variable to \textit{random error} in that variable.
   If the observed difference is large compared to the error, we can \textit{infer} that a true difference exists in the (real or hypothetical) larger population.
 \end{minipage}}
@@ -220,13 +220,27 @@ d <- data.frame(x = factor(rep(c('Reference', 'Supa-dupa treatment'), each = 5))
 stripchart(y ~ x, data = d, vertical = TRUE, method = 'jitter', xlab = '', ylab = 'Yield (some units)', ylim = c(0, max(d$y)))
 @
 
-Our mean values in this case are \Sexpr{signif(mean(subset(d, x == 'Reference')$y), 3)} (reference) and \Sexpr{signif(mean(subset(d, x == 'Super treatment')$y), 3)} (the new treatment).
+Our mean values in this case are \Sexpr{signif(mean(subset(d, x == 'Reference')$y), 3)} (reference) and \Sexpr{signif(mean(subset(d, x == 'Supa-dupa treatment')$y), 3)} (the new treatment).
 So there is a clear difference, right?!
 No! There is always a difference, and we might need inferential statistics to determine \textit{if a difference really means anything}.
 In this case, we can immediately see that there is no meaningful difference without even applying a statistical model.
 Why?
 Because the size of the difference is small compared to the random error.
 There are no statistics needed to tell us this, making this example the first case where statistics are \textbf{not} useful.
+
+The ``population'' about which we make inferences can be challenging to think about.
+For observational studies, where 
+Ideally, we would like to design experiments that provide information about how a process would function elsewhere.
+For example, if we actually found a 30\% increase in methane yield from the supa-dupa process, we might hope that the same process would provide a similar improvement if applied to any sludge.
+But variation in sludge composition could make this unlikely, so expecting this response is risky.
+Perhaps then we should consider only sludge with similar characteristics, and our hypothetical population is all secondary (waste activated) sludge from municipal wastewater treatment plants.
+Perhaps we need to consider solids retention time also.
+
+\fbox{\begin{minipage}{40em}
+  \textbf{2. The population concept} \\
+  Inferences made using statistics apply to some real or imaginary population of observational units, from which your experiment sampled.
+\end{minipage}}
+
 
 What is random error anyway?
 It is the sum of all the sources of error in our measurements which we do not completely understand and cannot completely control.
@@ -237,7 +251,7 @@ And if we assume it follows some kind of distribution, we can use this informati
 It is typical to assume (effectively define) that the expected mean value of random error is zero, and to estimate the value of random error inhererent in our measurements from the observed error.
 
 Systematic error is different.
-It does not have a mean of zero, is repeatable, and it may be possible to assign it to a particular cause.
+It does not have a mean of zero, is generally repeatable, and it may be possible to assign it to a particular cause.
 For example, technician effects may be systematic errors. 
 Depending on the experimental design and the analysis approach, one particular source of error could be identified (or not identified) as either random or systematic?
 Confused?
