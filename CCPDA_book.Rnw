@@ -22,6 +22,9 @@
 \addtolength{\topmargin}{-.7in}
 \addtolength{\textheight}{1.4in}
 
+% Defined numbered custom text box environment
+\newcounter{numbox}[]
+\newenvironment{numbox}[0]{\refstepcounter{numbox}\par\medskip \textbf{Box~\thenumbox #.} \rmfamily}{}
 
 \title{A Crash Course in Practical Data Analysis}
 \author{Sasha Hafner\footnote{\texttt{sasha@hafnerconsulting.com}}}
@@ -39,7 +42,7 @@
 <<setup, include = FALSE, cache = FALSE>>= 
 library(knitr)
 options(useFancyQuotes = FALSE)
-opts_chunk$set(error = TRUE, comment = "#", out.height = "4.0in", out.width = "4.5in", fig.height = 5, fig.width = 6.75, fig.align = "center", cache = TRUE)
+opts_chunk$set(error = TRUE, comment = "#", out.height = "4.0in", out.width = "4.4in", fig.height = 5, fig.width = 5.5, fig.align = "center", cache = TRUE)
 options(tidy = TRUE, width = 70)
 rm(list = ls())
 @
@@ -176,10 +179,14 @@ Working with scripts in a programming language immediately solves part of this p
 Why?--because a script contains a detailed description of exactly what you did.
 This is a major advantage of using a programming language for your work, instead of a spreadsheet.
 
-\fbox{\begin{minipage}{40em}
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:scripts}
   \textbf{What the \#@!*\% is a script?} \\
   A \textit{script} is just a text file with some programming code.
-  When doing data analysis with a programming language, it is typical (I might say essential) to enter and save your commands in scripts, which can be run or modified later.
+  When doing data analysis with a programming language, it is typical to enter and save your commands in scripts, which can be run or modified later.
+\end{numbox}
+\medskip
 \end{minipage}}
 
 For complex analyses, or at least after you have a little experience with a new programming language, I recommend going one step further, and tracking \textit{changes} to your scripts.
@@ -196,29 +203,37 @@ In the least, you can keep a log of major changes within each spreadsheet, in a 
 Here it can be helpful to include the date, file name, your name, in addition to a description of the changes.
 This is helpful for files used for only data entry as well--if you delete or correct a cell, record that change!
 
-\section{Uses and abuses of statistics}
+\section{Inferential statistics}
 The term ``statistics'' can mean a few things, but here I mean statistical methods and statistical models used for data analysis.
 Here I am also focused on \textit{inferential} statistics, i.e., methods and models meant to make some kind of inference.
 For example, you might like to know if your new sludge treatment method improves biogas yields.
 In some cases statistics can help answer a question like this, and in others, they are worse than useless.
 To help understand why, it can be useful to think about some basic concepts in inferential statistics (box 1).
 
-\fbox{\begin{minipage}{40em}
-  \textbf{1. Inferential statistics: the basic concept} \\
-  Inferential statistical methods are based comparing a \textit{difference} in some variable to \textit{random error} in that variable.
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:scripts}
+  \textbf{Inferential statistics: the basic concept} \\
+  Inferential statistical methods are based comparing a measured \textit{difference} in some variable to \textit{random error} in that variable.
   If the observed difference is large compared to the error, we can \textit{infer} that a true difference exists in the (real or hypothetical) larger population.
+\end{numbox}
+\medskip
 \end{minipage}}
 
 The difference is the effect you are interested in.
 Thinking about the sludge example, the difference would be the size of the difference in yield between your new treatment and a reference treatment (or no treatment). 
 Typically, we use the \textit{mean} or average difference as our best estimate of the effect.
-We might have measured these results:
+We might have measured the results shown in Fig. \ref{fig:sludgestrip}.
 
+\begin{figure}[h]
 <<echo=FALSE>>=
 set.seed(124)
 d <- data.frame(x = factor(rep(c('Reference', 'Supa-dupa treatment'), each = 5)), y = rnorm(10, mean = 200, sd = 30))
 stripchart(y ~ x, data = d, vertical = TRUE, method = 'jitter', xlab = '', ylab = 'Yield (some units)', ylim = c(0, max(d$y)))
 @
+  \caption{A comparison of biogas yields from sludge for two different treatments. Each point represents a single unit of observation.}
+\label{fig:sludgestrip}
+\end{figure}
 
 Our mean values in this case are \Sexpr{signif(mean(subset(d, x == 'Reference')$y), 3)} (reference) and \Sexpr{signif(mean(subset(d, x == 'Supa-dupa treatment')$y), 3)} (the new treatment).
 So there is a clear difference, right?!
@@ -229,56 +244,77 @@ Because the size of the difference is small compared to the random error.
 There are no statistics needed to tell us this, making this example the first case where statistics are \textbf{not} useful.
 
 The ``population'' about which we make inferences can be challenging to think about.
-For observational studies, where 
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:scripts}
+  \textbf{The population concept} \\
+  Statistics are used to draw conclusions about a \textit{population}, which may be real or imaginary.
+  The \textit{sample} used in any experiment should reflect the population of interest.
+\end{numbox}
+\medskip
+\end{minipage}}
+
+For observational studies, where the population is real, there is no challenge.
+For example, if you are interested in some characteristic of engineering students, the population of your student might be all engineering students in Germany.
+For experimental studies, the population is often imaginary (also called ``hypothetical'' or ``potential'' \citep[p. 17]{zarBiostatisticalAnalysis1999}).
 Ideally, we would like to design experiments that provide information about how a process would function elsewhere.
 For example, if we actually found a 30\% increase in methane yield from the supa-dupa process, we might hope that the same process would provide a similar improvement if applied to any sludge.
 But variation in sludge composition could make this unlikely, so expecting this response is risky.
 Perhaps then we should consider only sludge with similar characteristics, and our hypothetical population is all secondary (waste activated) sludge from municipal wastewater treatment plants.
 Perhaps we need to consider solids retention time also.
+Figure \ref{fig:kcomp} below shows that the true population is not always as broad as we might expect.
 
-\fbox{\begin{minipage}{40em}
-  \textbf{2. The population concept} \\
-  Inferences made using statistics apply to some real or imaginary population of observational units, from which your experiment sampled.
-\end{minipage}}
-
-
-What is random error anyway?
-It is the sum of all the sources of error in our measurements which we do not completely understand and cannot completely control.
-In the plot above, the variation in the vertical position of the points is a representation of the random error.
+\section{Random and systematic error}
+Random error is important in inferential statistics, but what is it anyway?
+Random error is the sum of all the sources of error in our measurements which we do not completely understand and cannot completely control.
+In the plot above (Fig. \ref{fig:sludgestrip}), the variation in the vertical position of the points is a representation of the random error.
 We call it random because we cannot predict its value for any one particular observation (i.e., any single point in the plot above).
 But we can estimate its magnitude from our measurements.
 And if we assume it follows some kind of distribution, we can use this information in statistical tests.
 It is typical to assume (effectively define) that the expected mean value of random error is zero, and to estimate the value of random error inhererent in our measurements from the observed error.
+When you calculate the standard deviation from a sample, you are typically quantifying random error.
 
 Systematic error is different.
-It does not have a mean of zero, is generally repeatable, and it may be possible to assign it to a particular cause.
+It is generally repeatable, and it may be possible to assign it to a particular cause.
 For example, technician effects may be systematic errors. 
-Depending on the experimental design and the analysis approach, one particular source of error could be identified (or not identified) as either random or systematic?
-Confused?
-Maybe the examples below will help.
+Depending on the experimental design and the analysis approach, one particular source of error could be identified (or not identified) as either random or systematic.
+If you are confused the examples below may help.
 
-How are these concepts important?
+Random error is an integral part of inferential statistics, but systematic error can cause real problems.
 In applying statistical models we commonly assume that individual observations are \textit{independent} (see Section \ref{sec:CLM}, for example). 
 If we want to make an estimate of the magnitude of random error, which is needed for a hypothesis test, we need to be sure that the the appropriate random error is reflected in our measurements.
+If our observations are not in fact independent, results may be affected by the presence of systematic error.
+For example, if you wanted to compare two sludge treatments, and decided to apply one treatment in your lab and ask a friend in a different country to test the other one, you would be asking for trouble!
+It would be nearly certain that some of the observed differences between the two samples were due to systematic errors that were laboratory-dependent.
 
-For example, every idiot knows that \textit{replication} is important in statistics.\footnote{Although it is not always required in a strict sense. For example, a repeated-measures design can be considered a two-factor analysis of variance without replication \citep{zarBiostatisticalAnalysis1999}.}
+\section{Uses and abuses of statistics}
+Everyone knows that \textit{replication} is important in statistics.\footnote{Although it is not always required in a strict sense. For example, a repeated-measures design can be considered a two-factor analysis of variance without replication \citep{zarBiostatisticalAnalysis1999}. And when using regression, it is not necessary to have multiple replicates for each level of the independent variable.}
 But it must be the right kind of replication.
 Replicating measurements on one single experimental unit that received some treatment and one single unit that did not can give you a lot of data, but you would both tend to underestimate random error and assign a likely systematic difference to your treatment!\footnote{This is related to the concept of \textit{pseudoreplication} or false replication, which has been discussed extensively \citep{hurlbertPseudoreplicationDesignEcological1984}.}
 A statistical model alone cannot tell you about the effect of the treatment in this case, and complex fancy-sounding approaches do not solve the problem (although many try, as numerous published papers show).
 Basic principles are important!
 
 In other cases, it may be acceptable to apply a stastical model, but unnecessary.
-When replication is done appropriately, and a measured difference is much larger than the random error, there may not be a need to apply a statistical model.
-This is common in engineering, where most experiments are designed (in contrast to observational) and treatments have large effects.
+When a measured difference is much larger than the random error, there may not be a need to apply a statistical model.
+This is common in engineering, where most experiments are designed (and resulting data are experimental and not observational) and treatments have large effects.
 
-We should add one point to this discussion. 
 Even when statistics are useful, they are not the complete solution.
 The \textit{magnitude} or the difference is more important.
-In fact, we can turn the basic idea of inferential statistics on its head for many types of experiments by considering this: what is the probability that any two physical, chemical, or biological treatments you might work with to improve some process have the \textit{exact} same effect on the process?
+In fact, we can turn the basic idea of inferential statistics on its head for many types of experiments by considering this: What is the probability that any two physical, chemical, or biological treatments you might work with to improve some process have the \textit{exact} same effect on the process?
 Essentially nill. 
 It is the magnitude of the difference that is important, so we must remember to consider both the size of the difference and the evidence we have about whether it reflects a true difference between treatments etc.
+Avoid feeling so satisfied by finding a ``statistically significant'' difference that you ignore the size of the difference.
+Unfortunately this very mistake is not rare (perhaps deliberately so) in research articles.
 
 Inferential statistics have relied heavily on \textit{p}-values, which are meant to reflect the probability of a ``Type I'' error, which is what happens when you conclude that there \textit{is} a difference when in fact there is not.
+To keep the risk of a Type I error low, it is good practice to avoid unnecessary hypothesis tests.
+This is why I recommend minimizing the use of so-called multiple comparison tests, such as Tukey's HSD test.
+It is true that the HSD test maintains a low experiment-wise error rate, but this is at the expense of power. 
+Instead, try to focus on the most important comparisons with e.g., Dunnett's or Bonferroni's adjustments \citep{belloInvitedReviewReproducible2018,zarBiostatisticalAnalysis1999}.
+If appropriate, treat your factor levels as a single quantitative variable and use regression.
+
+Even if you are cautious in avoiding unneccesary hypothsis tests, conventional interpretation of statistical results is being questioned, and this discussion is worth paying attention to.
 The use of \textit{p}-values and in particular, the use of an arbitrary cutoff for assessing ``statistical significance'' has been strongly criticized over the past few decades, and statisticians have proposed (and argued about) alternatives \citep{wassersteinMovingWorld052019}.\footnote{This paper, actually an editorial in a special issue on the topic, provides a very interesting summary of the problem and proposed solutions \citep{wassersteinMovingWorld052019}.}
 Advice includes completely dropping the use of a fixed cutoff (commonly called $\alpha$) as well as the term ``statistically significant''.
 Instead, we might consider reporting actual \textit{p}-values, using confidence intervals, and always considering the magnitude of any difference.
@@ -286,7 +322,7 @@ Instead, we might consider reporting actual \textit{p}-values, using confidence 
 I'll end this section with one last reminder about the limitations of experimental work.
 Even very clear differences observed in your laboratory may not work out the same way in other laboratories, or at pilot or full scale. 
 Why not?
-For starters, there are always differences, and particularly for biological processes or even biological substrates, many differences are difficult to measure or even observe.
+For starters, there are always differences between technicians and laboratories, and particularly for biological processes or even biological conversions, many differences are difficult to measure or even observe.
 I and some collaborators have recently looked into the reproducibility of kinetic results extracted from BMP tests in the lab.\footnote{You can find a short presentation on this topic here: \url{https://www.bioenergie-events.de/cmp/program/short-presentations}.}
 In many cases, results from individual laboratories could be used to show ``highly significantly different'' conversion rates between two substrates, e.g., \textit{p}-values well below 0.001.
 But these results did not carry over to other laboratories, some of which had similarly ``significant'' results, but for the \textit{opposite} difference (Fig. \ref{fig:kcomp})!
@@ -305,7 +341,7 @@ It happens to be my favorite tool for data analysis, partially because it is rea
 Python is also quite popular.
 
 \begin{figure}
-\includegraphics[width = 160mm]{images/rstudio1.png}
+\includegraphics[width = 120mm]{images/rstudio1.png}
   \caption{The RStudio IDE, which can be used for working with the R language. It is available for free for Windows, Mac, and Linux, and is the easiest way to get started with R. You can find more details here: \url{https://www.rstudio.com/products/rstudio/download/}. Personally I much prefer to use the text editor Neovim with the Nvim-R plugin (\url{https://github.com/jalvesaq/Nvim-R}).}
 \label{fig:rstudio1}
 \end{figure}
@@ -320,10 +356,15 @@ Users actually see and can manually manipulate their data.
 A programming language requires some ability to visualize data objects and their manipulation and relate these to symbolic variable names and commands.
 This isn't trivial.
 
-\fbox{\begin{minipage}{40em}
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:ssprob1}
   \textbf{One problem with spreadsheets} \\
   Spreadsheet data analysis is cell-based.
-  Your results are generally dependent on many formulas distributed among many cells.
+  Results are generally dependent on many formulas distributed among many cells, each with their own formulas.
+  This feature makes it more difficult to find write flexible ``programs'' and to find mistakes.
+  In contrast, multiple rows of data are typically changed by a single line of R or Python code.
+\end{numbox}
 \end{minipage}}
 
 
@@ -345,23 +386,38 @@ Before analyzing you data, make some plots, think about your experiment, and ask
 The list of questions below is not explained in great detail here, but it is referred to in the examples.
 
 \begin{enumerate}
-  \item What is the unit of observation? What is the thing on which you made measurements? Is it appropriate? It should reflect the population that you are interested in.
+  \item What question would you like you to answer? Is your sample appropriate for your question? The sample should reflect the population that you are interested in.
+  \item What is the unit of observation? What is the thing on which you made measurements? Clearly describe it. 
   \item Do you have replication, and it is the right type? Are the observations independent, apart from whatever factor you would like to test? 
   \item Are there systematic errors present in your data that could affect the results? If all obserations have the same systematic error (e.g., you made the measurements instead of your more experienced colleague) there is generally no reason to expect an effect on a comparison. If systematic error is associated with the experimental factor, however, you have a problem that statistical models cannot (easily) solve.
+  \item Have you plotted your data? Explain what you see. Do you really need to apply a statistical model?
   \item Is your experimental factor continuous or categorical by nature? The answer determines the way you should analyze your data and interpret results.
-  \item What type of a relationship do you expect (or see) between your treatments and the response variable(s)? How can your approach to data analysis accommodate this? Are transformations needed? Polynomials?
+  \item What type of a relationship do you expect (or see) between your treatments and the response variable(s)? Additive? Multiplicative? How can your approach to data analysis accommodate this? Are transformations needed? Polynomials?
+  \item Is there any reason to expect that errors are not normally distributed? Should you consider a transformation? It has been argued that log-normal distributions are more common than normal \citep{diwakarEvaluationNormalLognormal2017}.  
 \end{enumerate}
 
 \section{Classical linear models}
 \label{sec:CLM}
-The only type of statistical method I will present in this book is linear regression, which we can refer to as ``classical models'', because you can do more than just simple or multiple linear regression with this tool.
-I've selected this method because I think it is extremely flexible and useful, and because I use it very frequently.
-In this short book, I don't have the option of including many different approaches, but another reason to focus on a single method is to use it to support what I think is an important piece of advice: avoid using statistical methods that you do not understand.
-It is likely that many statistical analyses you will need to do can be done using classical linear models, and it is relatively easy to understanding and apply.
+In this book I will present a single statistical method: linear regression, which we can perhaps more accurately refer to as a set of methods called ``classical linear models''
+You can use classical linear models for much more than just simple or multiple linear regression, but the heart of the calculations are the same as in linear regression, with an analysis of variance (ANOVA) table fitted on top in some cases.
+I've selected this method because I think it is extremely flexible and useful, and because I tend to use it frequently.
+In this short book, I don't have the option of including many different approaches, but another reason to focus on a single method is to use it to support what I think is an important piece of advice: 
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:scripts}
+  \textbf{Don't use methods you don't understand} \\
+  Access to powerful statistical models has increased in recent years, and code from the Internet can easily be copied and modified to apply to a new problem.
+  However, I would advise you to avoid using statistical methods that you do not have some basic understanding of.
+\end{numbox}
+\medskip
+\end{minipage}}
+
+It is likely that many statistical analyses you will need to do can be done using classical linear models, and they are relatively easy to understand and apply.
 
 In R, several classical statistical models can be implemented using one function: \texttt{lm} (for linear model).
 The \texttt{lm} function can be used for simple and multiple linear regression, analysis of variance (ANOVA), and analysis of covariance (ANCOVA). 
-With data transformations and polynomials, it can easily handle (some) non-normal error distributions and non-linear responses.
+With data transformations and polynomials, \texttt{lm()} can easily handle (some) non-normal error distributions and non-linear responses.
 
 The arguments for \texttt{lm} are
 
@@ -437,6 +493,8 @@ I'll load the graphics and date/time packages as well.
 library(reshape2)
 library(ggplot2)
 library(lubridate)
+library(rmarkdown)
+library(dplyr)
 @
 
 I'll reshape these data in a couple ways.
@@ -466,18 +524,22 @@ So we have influent composition, and the composition of effluent for the wetland
 Let's assume we are interested in ammonia.
 I'll plot ammonia concentrations over time.
 
+\begin{figure}
 <<>>=
 ggplot(ww, aes(doy, NH3.N, colour = source)) +
   geom_line() +
   geom_point() +
   labs(x = 'Day of year', y = 'Total ammonia N conc. (mg/L)')
 @
+  \caption{Ammonia concentration in influent and effluent from the two wetlands, showing removal}
+\end{figure}
 
 It it clear that both wetlands remove ammonia--effluent concentrations are always below influent around the same date.
 But can we compare the two plant species?
 Let's start thinking about the questions in Section \ref{sec:questions} before we answer that question.
 
 \begin{enumerate}
+  \item We might be interested to know if the ammonia removal efficiency of wetlands planted with these two plant species differs. And we should also want to know what the removal efficiency is, i.e., its magnitude.
   \item The unit of observation is a single sampling time (date) for a single wetland.
   \item Yes, we have replication: we have multiple measurements for each wetland. Is it the right kind though? Umm. . .
 \end{enumerate}
@@ -486,12 +548,13 @@ Are observations independent?
 No--all the blue observations are from a single wetland, for example.
 Well, is the replication the right kind then? 
 Probably not, but it depends on the question we want to answer!
-The obvious question is: ``Does the ammonia removal efficiency of wetland planted with these two plant species differ \textit{in general}?''
-But to answer this question using inferential statistics, we would need multiple replicated wetlands for each species!
+Presumably we are interested in whether ammonia removal differs between the two species \textit{in general}.
+That is, our hypothetical population is a bunch of similar constructed wetlands with one of these two species.
+But to answer this question using inferential statistics, we would need multiple replicated \textit{wetlands} for each species!
 So no, we do not have the right kind of replication.
 If we proceeded to apply a statistical model here we would really be comparing these two particular wetlands.
 Could we be sure that any difference is due to the plants and not some other difference between the two wetlands, e.g., retention time, some other plants, degree of aeration?
-Maybe not.
+Probably not.
 
 Unfortunately this situation may be unavoidable when it is difficult or expensive to create or treat some unit of observation--think about pilot-scale reactors, for example!
 We do have the option of assuming that the plants are the main cause of differences between these two wetlands, but such a decision should be supported.
@@ -499,11 +562,14 @@ This could be done by e.g., running the wetlands in parallel for some time befor
 Or, evidence could also come from other studies that show small variability among replicate wetlands.
 Regardless, this leap of faith should be explicitly described, if it is employed.
 
+We can get a hint that something is amiss here by thinking about this: Are we guaranteed to see a ``significant'' difference eventually if we have a large enough sample size?
+Well, since it is impossible for two individual wetlands to be exactly the same, yes.
+In this particular example, we also have the problem of autocorrelation within time series measurements; measurements made closer together are more likely to be similar.
+
 In this particular case, we do not have enough knowledge to know if it is appropriate, and we didn't invest the money and effort in collecting the data, so it is easy to simply say they cannot be used in this way.
 Furthermore, we can see in the plot that there is no consistent difference--so there is clearly no reason to apply a statistical model here.
-The only value I see in these data is in presenting the estimates of removal efficiency, but of course without any estimate of variability.
-Let's estimate removal efficiency though.
-For that it is easiest if we have the different wetlands in separate columns.
+The only value I see in these data is in presenting the estimates of average removal efficiency.
+To calculate mean values, it is easiest if we have the different wetlands in separate columns.
 
 <<>>=
 head(wl)
@@ -533,15 +599,45 @@ And we can calculate mean values and standard deviation.
 w3 <- melt(w2, measure.vars = c('reff_cp', 'reff_pa'),
            value.name = 'reff', variable.name = 'wetland')
 
-summarise(group_by(w3, parameter, wetland), reff_mean = mean(reff), reff_sd = sd(reff))
+wlsumm <- summarise(group_by(w3, parameter, wetland), reff_mean = mean(reff), reff_sd = sd(reff))
+@
+
+<<>>=
+kable(wlsumm, digits = 1)
+@
+
+Nitrate values are missing.
+We can exclude them but then we should also add the number of measurements.
+
+<<>>=
+wlsumm <- summarise(group_by(w3, parameter, wetland), nn = sum(!is.na(reff)), 
+                    reff_mean = mean(reff, na.rm = TRUE), reff_sd = sd(reff, na.rm = TRUE))
+@
+
+<<>>=
+kable(wlsumm, digits = 1)
+@
+
+Not surprisingly, nitrate removal was negative--presumably it is produced by nitrification.
+Let's omit it for a plot.
+
+<<>>=
+ggplot(subset(wlsumm, parameter != 'NO3.N'), aes(parameter, reff_mean, fill = wetland)) +
+  geom_bar(position = position_dodge(), stat = 'identity') +
+  geom_errorbar(aes(ymin = reff_mean - reff_sd, ymax = reff_mean + reff_sd), 
+                position = position_dodge(0.9), width = 0.2) +
+  labs(x = 'Analyte (mg/L)', y = 'Apparent removal efficiency (%)', 
+       fill = 'Wetland')
 @
 
 So there are some ``statistics''--average removal efficiency and some estimate of variability over time for these \textbf{two} wetlands.
+There is no evidence here of meaningful differences among the two plant species.
+If we were interested in this topic, we had better start designing more wetlands!
 
 
 \section{Example 2: Comparing two BMP methods}
 I did some work on the evaluation of a new method for measurement of biochemical methane potential (BMP) a couple years ago \citep{justesenDevelopmentValidationLowcost2019}.
-We were interested in determining if the method gave different results from other methods.
+We were interested in determining if our new method gave different results from other methods.
 Let's get the data.
 
 <<>>=
@@ -552,11 +648,17 @@ bb <- read.csv('data/BMP_comp.csv')
 bb
 @
 
+Continuing with the questions posed in Section \ref{sec:questions}, the sample should be appropriate for the question.
 The response variable is BMP measured for a single bottle using a particular method (gravimetric or the new one, GD-BMP, \texttt{gdt}). 
 The unit of observation is a single bottle.
 It looks like we have replication--three bottles for all substrates except cellulose, for which we have two.
+Apart from receiving the same substrates, the bottles were independent.
+These measurements were carried out by a single group of researchers at a single laboratory, so undoubtedly there are important systematic errors.
+But we will assume they apply equally to all bottles. 
+The experimental factor--measurement method--is categorical by nature.
 Importantly, it seems that both of the methods were applied to each bottle (the \texttt{id} column has a unique bottle identifier).
-If possible, this approach (paired measurements or repeated measures) is more \textit{powerful} than the use of separate units of observation, because some of the random error is eliminated.
+This approach (paired measurements or repeated measures) is more \textit{powerful} than the use of separate units of observation, because some of the random error is eliminated.
+Use this fact to your advantage if you can.
 
 Let's plot these data.
 
