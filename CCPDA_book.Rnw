@@ -102,7 +102,12 @@ But here I mean changing the structure of your data--the way they are organized 
 These steps generally require more time and effort than those that follow.
 If you think ``data science'' is cool, you had better enjoy these types of tasks!
 
-Checking data . . .
+Data should be checked for obviously incorrect or missing values before analysis.
+Calculation of simple descriptive statistics (mean, standard deviation), and extraction of minimum and maximum values can be helpful here.
+In R, the \texttt{summary()}\footnote{Or \texttt{dfsumm()} from \url{https://github.com/sashahafner/jumbled}.} function is an easy way to do this.
+In Python, \textt{describe()} can be used.
+Bivariate plots can also be useful.
+Unfortunately, these approaches only highlight unusual values--they can not be used to ensure there are \textit{no} errors in a dataset.
 
 Data visualization is the processing of plotting data, to literally look for patterns or differences.
 Please just accept here at the start that it is essential.
@@ -111,6 +116,77 @@ The examples below should make this clear.
 Finally, the last step, data analysis, includes hypothesis tests through application of statistical models, perhaps as well as more mundane calculation of summaries.
 
 This book will cover all of these steps in at least a \textit{little} detail.
+
+\section{Spreadsheets and programming languages}
+\label{sec:softwaretype}
+R is a programming language and a software environment for statistical computing (Fig. \ref{fig:rstudio1}).
+It happens to be my favorite tool for data analysis, partially because it is really good, and partially because I happened to be introduced to it a decade or two ago.
+Python is also quite popular.
+Matlab is popular in academic settings, where it may actually be required for some course work. 
+But it is not free or open-source, and it would not be unfair to say it has been eclipsed by alternatives that are.
+
+\begin{figure}
+\includegraphics[width = 120mm]{images/rstudio1.png}
+  \caption{The RStudio IDE, which can be used for working with the R language. It is available for free for Windows, Mac, and Linux, and is the easiest way to get started with R. You can find more details here: \url{https://www.rstudio.com/products/rstudio/download/}. Personally I much prefer to use the text editor Neovim with the Nvim-R plugin (\url{https://github.com/jalvesaq/Nvim-R}).}
+\label{fig:rstudio1}
+\end{figure}
+
+But I would guess that Microsoft Excel, a spreadsheet program, is more popular by orders of magnitude.\footnote{I don't know if anyone has tried to make an estimate.}
+Why?
+It is probably partially related to history, but one reason may be that it is very simple to \textit{start} using Excel.
+Challenges come later.
+In contrast, gettings started with a new programming language is not always easy.
+Also, Excel and other spreadsheet programs are cell-based. 
+Users actually see and can manually manipulate their data.
+A programming language requires some ability to visualize data objects and their manipulation and relate these to symbolic variable names and commands.
+This isn't trivial, but is a very powerful approach.
+
+Based on my experience, I recommend spreadsheets for data entry and storage.
+Anything else related to data analysis is better done in R or Python. 
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:ssprob1}
+  \textbf{Cell-based spreadsheets} \\
+  Spreadsheet data analysis is cell-based.
+  Results are generally dependent on many formulas distributed among many cells, each with their own formulas.
+  This feature makes it more difficult to write flexible ``programs'' and to find mistakes.
+  In contrast, multiple rows of data are typically changed by a single line of R or Python code.
+  Formulas in a single cell may refer to multiple cells, but it is difficult to make these references \textit{scalable}.
+\end{numbox}
+\end{minipage}}
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:ssprob1}
+  \textbf{Data manipulation in spreadsheets} \\
+  Restructuring small datasets in a spreadsheet can be easy and quick.
+  But manual manipulation becomes impractical for large datasets.
+  And if original data change or there is a need to repeat manipulation, it is necessary to start again, while a script can simply be run again.
+\end{numbox}
+\end{minipage}}
+
+Although it takes a bit more effort to get started with a programming language, it takes very little time to start getting dividends.
+You will complete tasks more quickly, probably with more accurate results, and automatically produce a detailed record of your analysis, which can be used again and again.
+
+R, Python, and similar languages are generally written in a script that can be saved, edited, shared, and re-run whenever changes to the analysis or input data change.
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:scripts}
+  \textbf{What the \#@!*\% is a script?} \\
+  A \textit{script} is just a text file with some programming code.
+  When doing data analysis with a programming language, it is typical to enter and save your commands in scripts, which can be run or modified later.
+\end{numbox}
+\medskip
+\end{minipage}}
+
+If you are a student trying to improve your data analysis skills and practice, what should you do?
+In general, I encourage students to learn a programming language, and the concensus seems to be that either R or Python is a good choice.
+Python and R interpreters (the software that actually reads your code and does what you tell it to do) can be downloaded and installed for free, and there is an immense population of free resources on both.
+
+I know I won't convince many of you who are wedded to Excel to invest the necessary effort required for learning R or Python, and I would not criticize you for that decision.
+But I do strongly encourage you to follow the advice in Section \ref{sec:tracking}.
 
 \section{Working with organized data}
 \label{sec:organize}
@@ -181,16 +257,6 @@ Data processing and manipulation are both prone to problems in this area.
 Working with scripts in a programming language immediately solves part of this problem for you.
 Why?--because a script contains a detailed description of exactly what you did.
 This is a major advantage of using a programming language for your work, instead of a spreadsheet.
-
-\fbox{\begin{minipage}{43em}
-\begin{numbox}
-  \label{box:scripts}
-  \textbf{What the \#@!*\% is a script?} \\
-  A \textit{script} is just a text file with some programming code.
-  When doing data analysis with a programming language, it is typical to enter and save your commands in scripts, which can be run or modified later.
-\end{numbox}
-\medskip
-\end{minipage}}
 
 For complex analyses, or at least after you have a little experience with a new programming language, I recommend going one step further, and tracking \textit{changes} to your scripts.
 I like to use Git and GitHub for this, but there are alternatives.
@@ -336,50 +402,6 @@ So be modest, be careful, and accept that your results just may be wrong.
   \caption{A demonstration of a complete lack of reproducibility in inferential statistics results among laboratories. Individual labs measured first-order rate constant for two substrates, and the ratio of these values is shown on the x axis. In many cases, differences (i.e., a ratio above or below 1) were ``statistically significant'' based on a \textit{t}-test, shown by \textit{p}-values below 0.05.}
 \label{fig:kcomp}
 \end{figure}
-
-\section{Spreadsheets and programming languages}
-\label{sec:softwaretype}
-R is a programming language and a software environment for statistical computing (Fig. \ref{fig:rstudio1}).
-It happens to be my favorite tool for data analysis, partially because it is really good, and partially because I happened to be introduced to it a decade or two ago.
-Python is also quite popular.
-
-\begin{figure}
-\includegraphics[width = 120mm]{images/rstudio1.png}
-  \caption{The RStudio IDE, which can be used for working with the R language. It is available for free for Windows, Mac, and Linux, and is the easiest way to get started with R. You can find more details here: \url{https://www.rstudio.com/products/rstudio/download/}. Personally I much prefer to use the text editor Neovim with the Nvim-R plugin (\url{https://github.com/jalvesaq/Nvim-R}).}
-\label{fig:rstudio1}
-\end{figure}
-
-But I would guess that Microsoft Excel, a spreadsheet program, is more popular by orders of magnitude.\footnote{I don't know if anyone has tried to make an estimate.}
-Why?
-It is probably partially related to history, but one reason may be that it is very simple to \textit{start} using Excel.
-Challenges come later.
-In contrast, gettings started with a new programming language is not always easy.
-Also, Excel and other spreadsheet programs are cell-based. 
-Users actually see and can manually manipulate their data.
-A programming language requires some ability to visualize data objects and their manipulation and relate these to symbolic variable names and commands.
-This isn't trivial.
-
-\fbox{\begin{minipage}{43em}
-\begin{numbox}
-  \label{box:ssprob1}
-  \textbf{One problem with spreadsheets} \\
-  Spreadsheet data analysis is cell-based.
-  Results are generally dependent on many formulas distributed among many cells, each with their own formulas.
-  This feature makes it more difficult to find write flexible ``programs'' and to find mistakes.
-  In contrast, multiple rows of data are typically changed by a single line of R or Python code.
-\end{numbox}
-\end{minipage}}
-
-
-Although it takes a bit more effort to get started with a programming language, it takes very little time to start getting dividends.
-You will complete tasks more quickly, probably with more accurate results, and automatically produce a detailed record of your analysis, which can be used again and again.
-
-If you are a student trying to improve your data analysis skills and practice, what should you do?
-In general, I encourage students to learn a programming language, and the concensus seems to be that either R or Python is a good choice.
-Python and R interpreters (the software that actually reads your code and does what you tell it to do) can be downloaded and installed for free, and there is an immense population of free resources on both.
-
-Matlab is popular in academic settings, where it may actually be required for some course work. 
-But it is not free or open-source, and it would not be unfair to say it has been eclipsed by alternatives that are.
 
 \section{Some questions for you}
 \label{sec:questions}
