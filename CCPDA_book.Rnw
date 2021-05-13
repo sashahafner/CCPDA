@@ -358,7 +358,7 @@ For example, if you wanted to compare two sludge treatments, and decided to appl
 It would be nearly certain that some of the observed differences between the two samples were due to systematic errors that were laboratory-dependent.
 
 \section{Uses and abuses of statistics}
-Everyone knows that \textit{replication} is important in statistics.\footnote{Although it is not always required in a strict sense. For example, a repeated-measures design can be considered a two-factor analysis of variance without replication \citep{zarBiostatisticalAnalysis1999}. And when using regression, it is not necessary to have multiple replicates for each level of the independent variable.}
+Everyone knows that \textit{replication} is important in statistics.\footnote{Although it is not always required in a strict sense. For example, a repeated-measures design can be considered a two-factor analysis of variance without replication \citep{zarBiostatisticalAnalysis1999}. And when using regression, it is not necessary to have multiple replicates for each level of the response variable.}
 But it must be the right kind of replication.
 Replicating measurements on one single experimental unit that received some treatment and one single unit that did not can give you a lot of data, but you would both tend to underestimate random error and assign a likely systematic difference to your treatment!\footnote{This is related to the concept of \textit{pseudoreplication} or false replication, which has been discussed extensively \citep{hurlbertPseudoreplicationDesignEcological1984}.}
 A statistical model alone cannot tell you about the effect of the treatment in this case, and complex fancy-sounding approaches do not solve the problem (although many try, as numerous published papers show).
@@ -454,6 +454,7 @@ The first argument, \texttt{formula}, is where you specify the basic structure o
 This approach is used in other R functions as well, such as \texttt{glm}, \texttt{gam}, and others.
 Venables et al. has a useful list of example formulas--some examples are repeated below.
 In these examples, the variables \texttt{x}, \texttt{y}, and \texttt{z} are continuous, and \texttt{A}, \texttt{B}, and \texttt{C} are factors.
+The response variable is \texttt{y}.
 
 \begin{tabbing}
 \hspace*{4.5cm} \= \hspace{1cm} \= \\
@@ -770,7 +771,7 @@ If we want more information or a better estimate of any probable difference betw
 Could this analysis have been done using a spreadsheet?
 Yes, but with some difficulty, and an unforunate lack of clarity and reproducibility.
 In LibreOffice Calc, it is necessary to first calculate the response variable (relative difference), as in the R code above, but then to add columns with ``dummy variables'' for substrate.
-This is shown in the figure below (Fig. \ref{fig:bmpspreadsheet1}), but also in the file ``BMP\_comp.ods'' in the spreadsheets directory.
+This is shown in the figure below (Fig. \ref{fig:bmpspreadsheet1}), and also in the file ``BMP\_comp.ods'' in the spreadsheets directory.
 
 \begin{figure}
 \includegraphics[width = 150mm]{images/BMP_comp_spreadsheet.png}
@@ -786,7 +787,6 @@ Variables and options are selected as shown below (Fig. \ref{fig:bmpspreadsheeta
 \caption{Inputs required for analysis of the BMP data in LibreOffice Calc.}
 \label{fig:BMPspreadsheetanalysis}
 \end{figure}
-
 
 \section{Example 3: VOC emission from silage}
 The data in \texttt{ethanol\_emis.xlxs} are on ethanol emission from maize silage (fermented cattle feed) measured in a simple wind tunnel.
@@ -855,6 +855,18 @@ ggplot(et, aes(log10(speed), log10(emis.n), colour = factor(temp.c))) +
        colour = 'Temperature') +
   theme(legend.position = 'top')
 @
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:ssprob1}
+  \textbf{Log transformations} \\
+  A log transformation of the response variables does two important things to your model.
+  First, it makes the effects of predictor variables \textit{multiplicative}, so a fixed absolute change in the predictor causes (or is correlated with) a relative change in the response.
+  Second, it changes the assumed error distribution from normal to lognormal.
+  In many cases both are needed together, conveniently.\footnote{An alternative is generalized linear models, where the error distribution can be specified separately from the transformation, or, in that case, the link function.\citep{glm}}.
+\end{numbox}
+\end{minipage}}
+
 
 <<>>=
 mod1 <- lm(log10(emis.n) ~ temp.c + log10(speed), data = et)
