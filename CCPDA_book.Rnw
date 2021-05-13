@@ -86,6 +86,7 @@ You can think of the process of turning laboratory measurements into informative
   \item Data entry (manual) or data collection (automated)
   \item Data processing
   \item Data manipulation
+  \item Data checking
   \item Data visualization
   \item Data analysis
 \end{enumerate}
@@ -100,6 +101,8 @@ But here I mean changing the structure of your data--the way they are organized 
 (The hip term for this process has become ``data wrangling''.)
 These steps generally require more time and effort than those that follow.
 If you think ``data science'' is cool, you had better enjoy these types of tasks!
+
+Checking data . . .
 
 Data visualization is the processing of plotting data, to literally look for patterns or differences.
 Please just accept here at the start that it is essential.
