@@ -81,7 +81,8 @@ For better or worse, I do not have a degree in statistics nor one in programming
 I am sure that contributes to some confusion on statistical theory here and there, but for now let's pretend it is an advantage: it means I will focus on practical statistics that are relatively accessible.
 
 \section{Data analysis steps}
-You can think of the process of turning laboratory measurements into informative and useful results as occuring in 5 steps:
+\label{sec:steps}
+You can think of the process of turning laboratory measurements into informative and useful results as occuring in 6 steps:
 \begin{enumerate}
   \item Data entry (manual) or data collection (automated)
   \item Data processing
@@ -105,7 +106,7 @@ If you think ``data science'' is cool, you had better enjoy these types of tasks
 Data should be checked for obviously incorrect or missing values before analysis.
 Calculation of simple descriptive statistics (mean, standard deviation), and extraction of minimum and maximum values can be helpful here.
 In R, the \texttt{summary()}\footnote{Or \texttt{dfsumm()} from \url{https://github.com/sashahafner/jumbled}.} function is an easy way to do this.
-In Python, \textt{describe()} can be used.
+In Python, \texttt{describe()} can be used.
 Bivariate plots can also be useful.
 Unfortunately, these approaches only highlight unusual values--they can not be used to ensure there are \textit{no} errors in a dataset.
 
@@ -122,11 +123,21 @@ This book will cover all of these steps in at least a \textit{little} detail.
 R is a programming language and a software environment for statistical computing (Fig. \ref{fig:rstudio1}).
 It happens to be my favorite tool for data analysis, partially because it is really good, and partially because I happened to be introduced to it a decade or two ago.
 Python is also quite popular.
-Matlab is popular in academic settings, where it may actually be required for some course work. 
-But it is not free or open-source, and it would not be unfair to say it has been eclipsed by alternatives that are.
+Matlab has its own advantages, and is popular in academic settings, where it may actually be required for some course work. 
+But it is not free or open-source, and it would not be unfair to say that for data analysis, it has been eclipsed by open-source alternatives.
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:scripts}
+  \textbf{What the \#@!*\% is a script?} \\
+  A \textit{script} is just a text file with some programming code.
+  When doing data analysis with a programming language, it is typical to enter and save your commands in scripts, which can be run or modified later.
+\end{numbox}
+\medskip
+\end{minipage}}
 
 \begin{figure}
-\includegraphics[width = 120mm]{images/rstudio1.png}
+\includegraphics[width = 150mm]{images/rstudio1.png}
   \caption{The RStudio IDE, which can be used for working with the R language. It is available for free for Windows, Mac, and Linux, and is the easiest way to get started with R. You can find more details here: \url{https://www.rstudio.com/products/rstudio/download/}. Personally I much prefer to use the text editor Neovim with the Nvim-R plugin (\url{https://github.com/jalvesaq/Nvim-R}).}
 \label{fig:rstudio1}
 \end{figure}
@@ -138,7 +149,7 @@ Challenges come later.
 In contrast, gettings started with a new programming language is not always easy.
 Also, Excel and other spreadsheet programs are cell-based. 
 Users actually see and can manually manipulate their data.
-A programming language requires some ability to visualize data objects and their manipulation and relate these to symbolic variable names and commands.
+Use of a programming language requires some ability to visualize data objects and their manipulation and relate these to symbolic variable names and commands.
 This isn't trivial, but is a very powerful approach.
 
 Based on my experience, I recommend spreadsheets for data entry and storage.
@@ -171,22 +182,21 @@ You will complete tasks more quickly, probably with more accurate results, and a
 
 R, Python, and similar languages are generally written in a script that can be saved, edited, shared, and re-run whenever changes to the analysis or input data change.
 
-\fbox{\begin{minipage}{43em}
-\begin{numbox}
-  \label{box:scripts}
-  \textbf{What the \#@!*\% is a script?} \\
-  A \textit{script} is just a text file with some programming code.
-  When doing data analysis with a programming language, it is typical to enter and save your commands in scripts, which can be run or modified later.
-\end{numbox}
-\medskip
-\end{minipage}}
-
 If you are a student trying to improve your data analysis skills and practice, what should you do?
 In general, I encourage students to learn a programming language, and the concensus seems to be that either R or Python is a good choice.
 Python and R interpreters (the software that actually reads your code and does what you tell it to do) can be downloaded and installed for free, and there is an immense population of free resources on both.
 
 I know I won't convince many of you who are wedded to Excel to invest the necessary effort required for learning R or Python, and I would not criticize you for that decision.
 But I do strongly encourage you to follow the advice in Section \ref{sec:tracking}.
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:sssrecs}
+  \textbf{Recommendations: Spreadsheets vs. programming languages} \\
+  Use spreadsheets for data entry and storage.
+  Use R or Python for everything else (see Section \ref{sec:steps}): data manipulation, checking, graphics, and analysis.
+\end{numbox}
+\end{minipage}}
 
 \section{Working with organized data}
 \label{sec:organize}
@@ -198,12 +208,18 @@ Of course, any electronic format is an improvement over data only stored on pape
 
 The following guidelines for organization were originally developed for data that will be analyzed using R or similar software (see Section \ref{sec:softwaretype}), but even if you plan to carry out all data analysis using spreadsheet software, they are still useful.
 
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:fileorg}
+  \textbf{Guidelines for organizing data within a file} \\
 \begin{enumerate}
   \item Header rows are only present at the top of the file
   \item Each column contains a single variable
   \item Each row contains a single observation
   \item Each file (or worksheet) contains a single block of data
 \end{enumerate}
+\end{numbox}
+\end{minipage}}
 
 This is probably best shown by example.
 See the files silage\_comp\_original.xlsx and silage\_comp\_restruct.xlsx for an example.
@@ -249,18 +265,38 @@ If you receive data from a collaborator or a public source, it is good practice 
 
 \section{Tracking yourself}
 \label{sec:tracking}
-I think it is a bit strange that people carry around a mobile phone that regularly tells some Google or Apple server where they are and possibly what they are doing, but I am completely in favor of tracking my every move when it comes to data analysis.
+I think it is a bit strange that people carry around a mobile phone that regularly tells some server where they are and possibly what they are doing, but I am completely in favor of tracking my every move when it comes to data analysis.
 In fact, doing so it essential for \textit{reproducible research}.
 Ideally, any conclusion you write in a paper or report should be based on an analysis that can be checked, repeated, and corrected.
 Data processing and manipulation are both prone to problems in this area.
 
 Working with scripts in a programming language immediately solves part of this problem for you.
-Why?--because a script contains a detailed description of exactly what you did.
+Why?--because a script (see Box \ref{box:scripts}) contains a detailed description of exactly what you did.
 This is a major advantage of using a programming language for your work, instead of a spreadsheet.
 
 For complex analyses, or at least after you have a little experience with a new programming language, I recommend going one step further, and tracking \textit{changes} to your scripts.
 I like to use Git and GitHub for this, but there are alternatives.
 These are especially useful if you collaborate with others on data analysis.
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:github}
+  \textbf{Git and GitHub} \\
+  Git is a ``version control system'' originally used for software code.
+  Git is an application that allows developers to track all changes in code down to the character, work on multiple versions simultaneously, and collaborate efficiently.
+  In its simplest sense, GitHub (\url{https://github.com}) is simply a place for storing Git repositories.
+  But it includes a convenient web interface and handy tools, and is now used for much more than software code. 
+  All this works really well for data analysis code as well!
+\end{numbox}
+\end{minipage}}
+
+
+\begin{figure}[h]
+\includegraphics[width = 100mm]{images/gitex1.png}
+  \caption{Example of some changes in an R script tracked with Git displayed on the GitHub website. The red code was deleted, and the green code added.}
+\label{fig:gitex1}
+\end{figure}
+
 
 Spreadsheets do not facilite repeating or checking any of the steps listed above, but this problem is especially accute for manual data manipulation.
 For calculations underlying data processing and analysis, sure, one could find the formulas underlying the calculations, and follow the cell references to check everything. 
@@ -274,14 +310,14 @@ This is helpful for files used for only data entry as well--if you delete or cor
 
 \section{Inferential statistics}
 The term ``statistics'' can mean a few things, but here I mean statistical methods and statistical models used for data analysis.
-Here I am also focused on \textit{inferential} statistics, i.e., methods and models meant to make some kind of inference.
+Here I am also focused on \textit{inferential} statistics, i.e., methods and models meant to make some kind of inference.\footnote{Descriptive statistics, e.g., mean and standard deviation, are also useful, but the distinction should be clear.}
 For example, you might like to know if your new sludge treatment method improves biogas yields.
 In some cases statistics can help answer a question like this, and in others, they are worse than useless.
-To help understand why, it can be useful to think about some basic concepts in inferential statistics (box 1).
+To help understand why, it can be useful to think about some basic concepts in inferential statistics (Box \ref{box:inferentialconcept}).
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
-  \label{box:scripts}
+  \label{box:inferentialconcept}
   \textbf{Inferential statistics: the basic concept} \\
   Inferential statistical methods are based comparing a measured \textit{difference} in some variable to \textit{random error} in that variable.
   If the observed difference is large compared to the error, we can \textit{infer} that a true difference exists in the (real or hypothetical) larger population.
@@ -316,7 +352,7 @@ The ``population'' about which we make inferences can be challenging to think ab
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
-  \label{box:scripts}
+  \label{box:popconcept}
   \textbf{The population concept} \\
   Statistics are used to draw conclusions about a \textit{population}, which may be real or imaginary.
   The \textit{sample} used in any experiment should reflect the population of interest.
@@ -376,12 +412,17 @@ It is the magnitude of the difference that is important, so we must remember to 
 Avoid feeling so satisfied by finding a ``statistically significant'' difference that you ignore the size of the difference.
 Unfortunately this very mistake is not rare (perhaps deliberately so) in research articles.
 
-Inferential statistics have relied heavily on \textit{p}-values, which are meant to reflect the probability of a ``Type I'' error, which is what happens when you conclude that there \textit{is} a difference when in fact there is not.
-To keep the risk of a Type I error low, it is good practice to avoid unnecessary hypothesis tests.
-This is why I recommend minimizing the use of so-called multiple comparison tests, such as Tukey's HSD test.
-It is true that the HSD test maintains a low experiment-wise error rate, but this is at the expense of power. 
-Instead, try to focus on the most important comparisons with e.g., Dunnett's or Bonferroni's adjustments \citep{belloInvitedReviewReproducible2018,zarBiostatisticalAnalysis1999}.
-If appropriate, treat your factor levels as a single quantitative variable and use regression.
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:multcomp}
+  \textbf{Advice on multiple comparison tests} \\
+  Avoid making many comparisons in your data analysis, especially if the predictor variable is quantitative by nature.
+  In this case, consider using regression.
+  Otherwise, focus on the important comparisons, possibly to a control level.
+\end{numbox}
+\medskip
+\end{minipage}}
+
 
 Even if you are cautious in avoiding unneccesary hypothsis tests, conventional interpretation of statistical results is being questioned, and this discussion is worth paying attention to.
 The use of \textit{p}-values and in particular, the use of an arbitrary cutoff for assessing ``statistical significance'' has been strongly criticized over the past few decades, and statisticians have proposed (and argued about) alternatives \citep{wassersteinMovingWorld052019}.\footnote{This paper, actually an editorial in a special issue on the topic, provides a very interesting summary of the problem and proposed solutions \citep{wassersteinMovingWorld052019}.}
@@ -403,15 +444,15 @@ So be modest, be careful, and accept that your results just may be wrong.
 \label{fig:kcomp}
 \end{figure}
 
-\section{Some questions for you}
+\section{Before you start}
 \label{sec:questions}
 Some of the issues introduced above should be considered whenever analyzing data.
 I can think of a few other points that are important as well.
-Before analyzing you data, make some plots, think about your experiment, and ask yourself a few questions.
-The list of questions below is not explained in great detail here, but it is referred to in the examples.
+Before analyzing you data, make some plots, think about your experiment, and ask yourself the questions listed below.
+This list is not explained in great detail here, but it builds on the material from earlier sections and is referred to in the examples.
 
 \begin{enumerate}
-  \item What question would you like you to answer? Is your sample appropriate for your question? The sample should reflect the population that you are interested in.
+  \item What research question would you like you to answer? Is your sample appropriate for your question? The sample should reflect the population that you are interested in.
   \item What is the unit of observation? What is the thing on which you made measurements? Clearly describe it. 
   \item Do you have replication, and it is the right type? Are the observations independent, apart from whatever factor you would like to test? 
   \item Are there systematic errors present in your data that could affect the results? If all obserations have the same systematic error (e.g., you made the measurements instead of your more experienced colleague) there is generally no reason to expect an effect on a comparison. If systematic error is associated with the experimental factor, however, you have a problem that statistical models cannot (easily) solve.
@@ -430,7 +471,7 @@ In this short book, I don't have the option of including many different approach
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
-  \label{box:scripts}
+  \label{box:understand}
   \textbf{Don't use methods you don't understand} \\
   Access to powerful statistical models has increased in recent years, and code from the Internet can easily be copied and modified to apply to a new problem.
   However, I would advise you to avoid using statistical methods that you do not have some basic understanding of.
@@ -454,7 +495,7 @@ The first argument, \texttt{formula}, is where you specify the basic structure o
 This approach is used in other R functions as well, such as \texttt{glm}, \texttt{gam}, and others.
 Venables et al. has a useful list of example formulas--some examples are repeated below.
 In these examples, the variables \texttt{x}, \texttt{y}, and \texttt{z} are continuous, and \texttt{A}, \texttt{B}, and \texttt{C} are factors.
-The response variable is \texttt{y}.
+The response variable is \texttt{y}, and the others are predictor variables.
 
 \begin{tabbing}
 \hspace*{4.5cm} \= \hspace{1cm} \= \\
@@ -473,6 +514,29 @@ The response variable is \texttt{y}.
 
 Of course all this applies to R, but formulas in Python are similar, and even for spreadsheet programs, the concepts still apply.
 
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:dummy}
+  \textbf{Response and predictor variables} \\
+  The term ``dependent'' variable has been widely used to refer to the variable that is (or hypothesized to be) dependent on (affected by) some other variables, called ``independent''.
+  The terms ``response'' and ``predictor'' variables doesn't imply a dependency or not, and are therefore better terms to use.
+\end{numbox}
+\medskip
+\end{minipage}}
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:dummy}
+  \textbf{What are dummy variables?} \\
+  Continuous predictor variables can be used without changes when using regression.
+  But factors (categorical variables) don't work like this.
+  Instead, with $n$ levels, at least $n-1$ binary (typically values of 0 or 1) ``dummy variables'' are used.
+  In effect, each level of the factor is turned into its own variable.
+  Dummy variables make it easy to handle categorical predictors through regression.
+\end{numbox}
+\medskip
+\end{minipage}}
+
 When you apply classical linear models, you should be aware of the assumptions that are employed every time model coefficients, \textit{p}-values, or confidence intervals are returned.
 
 \begin{enumerate}
@@ -490,6 +554,7 @@ For linear regression in particular, there are two more assumptions.
 
 Some of these assumptions can be evaluated before even entering data, but others can only be evaluated after a model has been fit, somewhat ironically.
 Functions available for the R language make it very easy to evaluate assumptions, but even spreadsheets can be used for the task with a bit of effort.
+You can find an excellent introduction to the use of linear models by Julian Faraway, available for both R \citep{farawayLinearModels2005} and now Python as well \citep{farawayLinearModelsPython2020}.
 
 \section{Example 1: Removal efficiency in treatment wetlands}
 Let's, finally, work on an example.
@@ -633,7 +698,7 @@ kable(wlsumm, digits = 1)
 @
 
 Nitrate values are missing.
-We can exclude them but then we should also add the number of measurements.
+We can exclude missing values but then we should also add the number of measurements.
 
 <<>>=
 wlsumm <- summarise(group_by(w3, parameter, wetland), nn = sum(!is.na(reff)), 
@@ -683,8 +748,6 @@ These measurements were carried out by a single group of researchers at a single
 But we will assume they apply equally to all bottles. 
 The experimental factor--measurement method--is categorical by nature.
 Importantly, it seems that both of the methods were applied to each bottle (the \texttt{id} column has a unique bottle identifier).
-This approach (paired measurements or repeated measures) is more \textit{powerful} than the use of separate units of observation, because some of the random error is eliminated.
-Use this fact to your advantage if you can.
 
 Let's plot these data.
 
@@ -717,6 +780,16 @@ Let's calculate a difference between the two methods for each individual bottle.
 That will remove some of the random error associated with bottles, and, conveniently, eliminates the problem with unequal variance.
 See how experimental design can help you?
 In general, a paired approach is more powerful, that is, more likely to show a clear difference when in fact one exists.
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:pairedobs}
+  \textbf{Paired observations} \\
+  Paired observations result from making two measurements on the same unit of observation (subject), typically under two different conditions or after application of two different treatments. 
+  In general the approach is more \textit{powerful} than if these measurements were made on different units of observation, because some of the random error is eliminated.
+  With more than two measurements, this approach can be called ``repeated measures''.
+\end{numbox}
+\end{minipage}}
 
 <<>>=
 library(tidyr)
@@ -776,7 +849,7 @@ This is shown in the figure below (Fig. \ref{fig:bmpspreadsheet1}), and also in 
 \begin{figure}
 \includegraphics[width = 150mm]{images/BMP_comp_spreadsheet.png}
 \caption{BMP comparison data ready for analysis in LibreOffice Calc (a spreadsheet program).}
-\label{fig:BMPspreadsheet1}
+\label{fig:bmpspreadsheet1}
 \end{figure}
 
 To actually fit the regression model, the ``Data'' menu is selected, then ``Statistics'', and finally, ``Regression''.
@@ -785,7 +858,7 @@ Variables and options are selected as shown below (Fig. \ref{fig:bmpspreadsheeta
 \begin{figure}
 \includegraphics[width = 70mm]{images/BMP_comp_spreadsheet_analysis.png}
 \caption{Inputs required for analysis of the BMP data in LibreOffice Calc.}
-\label{fig:BMPspreadsheetanalysis}
+\label{fig:bmpspreadsheetanalysis}
 \end{figure}
 
 \section{Example 3: VOC emission from silage}
@@ -861,9 +934,10 @@ ggplot(et, aes(log10(speed), log10(emis.n), colour = factor(temp.c))) +
   \label{box:ssprob1}
   \textbf{Log transformations} \\
   A log transformation of the response variables does two important things to your model.
-  First, it makes the effects of predictor variables \textit{multiplicative}, so a fixed absolute change in the predictor causes (or is correlated with) a relative change in the response.
+  First, it makes the effects of predictor variables \textit{multiplicative} \citep{steelPrinciplesProceduresStatistics1997}, so a fixed absolute change in the predictor causes (or is correlated with) a relative change in the response.
   Second, it changes the assumed error distribution from normal to lognormal.
-  In many cases both are needed together, conveniently.\footnote{An alternative is generalized linear models, where the error distribution can be specified separately from the transformation, or, in that case, the link function.\citep{glm}}.
+  In many cases both are needed together, conveniently.
+  If this is not the case, generalized linear models are an alternative \citep{mccullaghGeneralizedLinearModels1989}.
 \end{numbox}
 \end{minipage}}
 
@@ -931,6 +1005,45 @@ ggplot(et, aes(log10(pred2), log10(emis.n), colour = factor(temp.c),
        colour = 'Temperature') +
   theme(legend.position = 'top')
 @
+
+\section{Problem 1. Inoculum effects on BMP}
+
+\section{Problem 2. Wood hardness and density}
+Let's read in a data set on the hardness of some Australian woods.
+
+<<>>= 
+hard <- read.csv("data/janka.csv")
+dfsumm(hard)
+@
+
+Let's start out by seeing what the data look like.
+
+<<>>= 
+plot(hardness ~ density, data = hard)
+@
+
+This looks like a pretty clear relationship.
+We might be interested in doing two things with these data: determining if wood hardness (difficult to measure) is related to wood density (easy to measure), and, if so, predicting hardness from the density.
+For the first task, our (alternative) hypothesis here is that density is a good predictor of hardness.
+It is clear in this case from simply looking at a plot that this hypothesis is correct, and so the hypothesis test itself is not so interesting here.
+But the model can still be useful.
+And the general approach applies in cases where we are more interested in assessing the ``statistical significance'' of a relationship.
+And we may still be interested in hypothesis tests about the nature of the relationship between hardness and density.
+We want to build this model:
+
+\section{Problem 3. Fruit fly longevity and sexual activity}
+The data in the file fruitfly.csv are from an experiment on fruitfly longevity.\footnote{And were copied from the faraway package in R.}
+
+Check out the data in the data frame `fruitfly`, which is part of the faraway package.
+
+    * Read the help file
+    * Are the data balanced?
+    * Plot the data in a way that helps you assess the effect of sexual activity on longevity while controlling for thorax length (feel free to copy or improve your own code from an earlier assignment)
+    * Carry out an ANOVA (with no covariate) to determine whether sexual activity has an effect on male fruit fly longevity.
+    Is there evidence of an effect? 
+    * Can you compare each level to a reference using contrasts? Can you change the reference level? How can you adjust the crtical $t-$value for the number of comparisons?
+    * What test is appropriate for evaluating all pairwise comparisons? If you use it, do you see differences?
+    * Now add thorax length as a covariate. How does it affect the results? Is there evidence that it should be included? If so, is there evidence that the slope (longevity vs. length) differs among activity levels? What should you conclude in the end about activity and longevity?
 
 \bibliography{bib}
 
