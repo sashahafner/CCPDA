@@ -102,6 +102,7 @@ But here I mean changing the structure of your data--the way they are organized 
 (The hip term for this process has become ``data wrangling''.)
 These steps generally require more time and effort than those that follow.
 If you think ``data science'' is cool, you had better enjoy these types of tasks!
+Section \ref{sec:softwaretype} discusses some limitations of using spreadsheets for these operations.
 
 Data should be checked for obviously incorrect or missing values before analysis.
 Calculation of simple descriptive statistics (mean, standard deviation), and extraction of minimum and maximum values can be helpful here.
@@ -112,17 +113,19 @@ Unfortunately, these approaches only highlight unusual values--they can not be u
 
 Data visualization is the processing of plotting data, to literally look for patterns or differences.
 Please just accept here at the start that it is essential.
-The examples below should make this clear.
+It is simply impossible to understand relationships among variables and catch all problems with data without plots.
+The examples below should make all this clear.
 
 Finally, the last step, data analysis, includes hypothesis tests through application of statistical models, perhaps as well as more mundane calculation of summaries.
+In this book one type of flexible statistic models is described: classical linear models (Section \ref{sec:CLM}).
 
 This book will cover all of these steps in at least a \textit{little} detail.
 
 \section{Spreadsheets and programming languages}
 \label{sec:softwaretype}
-R is a programming language and a software environment for statistical computing (Fig. \ref{fig:rstudio1}).
-It happens to be my favorite tool for data analysis, partially because it is really good, and partially because I happened to be introduced to it a decade or two ago.
-Python is also quite popular.
+R (\url{https://www.r-project.org/}) is a programming language and a software environment for statistical computing (Fig. \ref{fig:rstudio1}).
+It happens to be my favorite tool for data analysis, partially because it is really good, and partially because I was, by change, introduced to it a decade or two ago.
+Python (\url{https://www.python.org/}) is also quite popular.
 Matlab has its own advantages, and is popular in academic settings, where it may actually be required for some course work. 
 But it is not free or open-source, and it would not be unfair to say that for data analysis, it has been eclipsed by open-source alternatives.
 
@@ -179,6 +182,8 @@ Anything else related to data analysis is better done in R or Python.
 
 Although it takes a bit more effort to get started with a programming language, it takes very little time to start getting dividends.
 You will complete tasks more quickly, probably with more accurate results, and automatically produce a detailed record of your analysis, which can be used again and again.
+This last point is important. 
+There are several reasons why data analysis might need to be repeated, including correction of mistakes in the analysis itself or the original data.
 
 R, Python, and similar languages are generally written in a script that can be saved, edited, shared, and re-run whenever changes to the analysis or input data change.
 
@@ -234,7 +239,8 @@ It follows all of the rules listed above.
 The only feature that is perhaps a bit odd is the use of multiple header rows.
 This turns out to be a convenient approach, however.
 The first two rows provide information for understanding the data, including units and more details on the analytes. 
-These ``exta'' headers are simply skipped when reading that data into R.
+These ``exta'' headers are simply skipped when reading these data into R or Python.
+The header in row 3 contains short names easy to use in code.
 
 \begin{figure}
 \includegraphics[width = 140mm]{images/silage_file_orig.png}
@@ -286,7 +292,7 @@ These are especially useful if you collaborate with others on data analysis.
   Git is a ``version control system'' originally used for software code.
   Git is an application that allows developers to track all changes in code down to the character, work on multiple versions simultaneously, and collaborate efficiently.
   In its simplest sense, GitHub (\url{https://github.com}) is simply a place for storing Git repositories.
-  But it includes a convenient web interface and handy tools, and is now used for much more than software code. 
+  But it includes a convenient web interface and handy tools, and is now used for much more than software code (Fig. \ref{fig:gitex1}). 
   All this works really well for data analysis code as well!
 \end{numbox}
 \end{minipage}}
@@ -303,7 +309,7 @@ Spreadsheets do not facilite repeating or checking any of the steps listed above
 For calculations underlying data processing and analysis, sure, one could find the formulas underlying the calculations, and follow the cell references to check everything. 
 But there are so many damn cells, each with its own formula!
 Code, in contrast, is concise by its nature. 
-(You can find a bit more discussion on this difference in Section \ref{sec:softwaretype}.)
+You can find a bit more discussion on this difference in Section \ref{sec:softwaretype}.
 If you insist on sticking with a spreadsheet for data analysis, what can you do?
 In the least, you can keep a log of major changes within each spreadsheet, in a dedicated worksheet.
 Here it can be helpful to include the date, file name, your name, in addition to a description of the changes.
@@ -314,7 +320,7 @@ The term ``statistics'' can mean a few things, but here I mean statistical metho
 Here I am also focused on \textit{inferential} statistics, i.e., methods and models meant to make some kind of inference.\footnote{Descriptive statistics, e.g., mean and standard deviation, are also useful, but the distinction should be clear.}
 For example, you might like to know if your new sludge treatment method improves biogas yields.
 In some cases statistics can help answer a question like this, and in others, they are worse than useless.
-To help understand why, it can be useful to think about some basic concepts in inferential statistics (Box \ref{box:inferentialconcept}).
+To help understand why, it can be useful to think about a basic concept in inferential statistics (Box \ref{box:inferentialconcept}).
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
@@ -362,14 +368,14 @@ The ``population'' about which we make inferences can be challenging to think ab
 \end{minipage}}
 
 For observational studies, where the population is real, there is no challenge.
-For example, if you are interested in some characteristic of engineering students, the population of your student might be all engineering students in Germany.
+For example, if you are interested in some characteristic of engineering students, the population might be all engineering students in Germany.
 For experimental studies, the population is often imaginary (also called ``hypothetical'' or ``potential'' \citep[p. 17]{zarBiostatisticalAnalysis1999}).
 Ideally, we would like to design experiments that provide information about how a process would function elsewhere.
 For example, if we actually found a 30\% increase in methane yield from the supa-dupa process, we might hope that the same process would provide a similar improvement if applied to any sludge.
 But variation in sludge composition could make this unlikely, so expecting this response is risky.
 Perhaps then we should consider only sludge with similar characteristics, and our hypothetical population is all secondary (waste activated) sludge from municipal wastewater treatment plants.
 Perhaps we need to consider solids retention time also.
-Figure \ref{fig:kcomp} below shows that the true population is not always as broad as we might expect.
+Figure \ref{fig:kcomp} in Section \ref{sec:useabuse} below shows that the true population is not always as broad as we might expect.
 
 \section{Random and systematic error}
 Random error is important in inferential statistics, but what is it anyway?
@@ -393,8 +399,10 @@ If we want to make an estimate of the magnitude of random error, which is needed
 If our observations are not in fact independent, results may be affected by the presence of systematic error.
 For example, if you wanted to compare two sludge treatments, and decided to apply one treatment in your lab and ask a friend in a different country to test the other one, you would be asking for trouble!
 It would be nearly certain that some of the observed differences between the two samples were due to systematic errors that were laboratory-dependent.
+Statistical methods are very powerful for detecting this type of effect, but assigning it to the treatment would be a major mistake.
 
 \section{Uses and abuses of statistics}
+\label{sec:useabuse}
 Everyone knows that \textit{replication} is important in statistics.\footnote{Although it is not always required in a strict sense. For example, a repeated-measures design can be considered a two-factor analysis of variance without replication \citep{zarBiostatisticalAnalysis1999}. And when using regression, it is not necessary to have multiple replicates for each level of the response variable.}
 But it must be the right kind of replication.
 Replicating measurements on one single experimental unit that received some treatment and one single unit that did not can give you a lot of data, but you would both tend to underestimate random error and assign a likely systematic difference to your treatment!\footnote{This is related to the concept of \textit{pseudoreplication} or false replication, which has been discussed extensively \citep{hurlbertPseudoreplicationDesignEcological1984}.}
@@ -450,7 +458,7 @@ So be modest, be careful, and accept that your results just may be wrong.
 In this book I will present a single statistical method: linear regression, which we can perhaps more accurately refer to as a set of methods called ``classical linear models''
 You can use classical linear models for much more than just simple or multiple linear regression, but the heart of the calculations are the same as in linear regression, with an analysis of variance (ANOVA) table fitted on top in some cases.
 I've selected this method because I think it is extremely flexible and useful, and because I tend to use it frequently.
-In this short book, I don't have the option of including many different approaches, but another reason to focus on a single method is to use it to support what I think is an important piece of advice: 
+In this short book, I don't have the option of including many different approaches, but another reason to focus on a single method is to use it to support what I think is an important piece of advice: focus on methods you understand. 
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
@@ -465,7 +473,8 @@ In this short book, I don't have the option of including many different approach
 
 It is likely that many statistical analyses you will need to do can be done using classical linear models, and they are relatively easy to understand and apply.
 
-In R, several classical statistical models can be implemented using one function: \texttt{lm} (for linear model).
+In R, several classical statistical models can be implemented using one function: \texttt{lm} (for linear model).\footnote{In R you can load help files by simplying typing \texttt{?} followed by the name of the function, so \texttt{?lm} will bring up a help file on this handy function.}
+Python has some similar functions, including \texttt{ols()} in the statsmodel package (\url{https://www.statsmodels.org/v0.10.2/}).
 The \texttt{lm} function can be used for simple and multiple linear regression, analysis of variance (ANOVA), and analysis of covariance (ANCOVA). 
 With data transformations and polynomials, \texttt{lm()} can easily handle (some) non-normal error distributions and non-linear responses.
 
@@ -715,7 +724,8 @@ And we can calculate mean values and standard deviation.
 w3 <- melt(w2, measure.vars = c('reff_cp', 'reff_pa'),
            value.name = 'reff', variable.name = 'wetland')
 
-wlsumm <- summarise(group_by(w3, parameter, wetland), reff_mean = mean(reff), reff_sd = sd(reff))
+wlsumm <- summarise(group_by(w3, parameter, wetland), reff_mean = mean(reff), 
+                    reff_sd = sd(reff))
 @
 
 <<>>=
@@ -727,7 +737,8 @@ We can exclude missing values but then we should also add the number of measurem
 
 <<>>=
 wlsumm <- summarise(group_by(w3, parameter, wetland), nn = sum(!is.na(reff)), 
-                    reff_mean = mean(reff, na.rm = TRUE), reff_sd = sd(reff, na.rm = TRUE))
+                    reff_mean = mean(reff, na.rm = TRUE), 
+                    reff_sd = sd(reff, na.rm = TRUE))
 @
 
 <<>>=
@@ -865,6 +876,7 @@ confint(mod1)
 We can say then, that at the 95\% confidence, any difference between the methods is probably smaller than 17\%, with the exception of ethanol.
 That is useful!
 If we want more information or a better estimate of any probable difference between the methods, we would need to carry out additional experiments.
+This is precisely what was later done, with comparisons made within and even among other laboratories, with measurements made by differenet technicians \citep{justesenDevelopmentValidationLowcost2019}.
 
 Could this analysis have been done using a spreadsheet?
 Yes, but with some difficulty, and an unforunate lack of clarity and reproducibility.
@@ -1033,6 +1045,8 @@ Take a look at the data and answer these questions:
   \item Did any effect vary by substrate?
 \end{enumerate}
 
+The original data are in a intermediate structure, with replicates across columns.
+
 <<>>=
 bi <- read.csv('data/BMP_inoc.csv')
 @
@@ -1040,6 +1054,9 @@ bi <- read.csv('data/BMP_inoc.csv')
 <<>>=
 bi
 @
+
+This structure could work well in a spreadsheet analysis.
+For analysis in R, the structure can be changed to long using the \texttt{gather()} function.
 
 <<>>=
 library(tidyr)
@@ -1050,6 +1067,8 @@ bil <- gather(bi, key = 'rep', value = 'BMP', contains('BMP'))
 head(bil)
 @
 
+Here are the values, with a single point representing a BMP value from a single bottle.
+
 <<>>=
 ggplot(bil, aes(substrate, BMP, colour = inoc)) +
   geom_jitter(height = 0)
@@ -1057,7 +1076,7 @@ ggplot(bil, aes(substrate, BMP, colour = inoc)) +
 
 
 \section{Problem 2. Wood hardness and density}
-Let's read in a data set on the hardness of some Australian woods.
+\citet{farawayLinearModels2005} presented some data on the hardness of some Australian woods, and I've copied these into the file janka.csv.
 
 <<>>= 
 hard <- read.csv("data/janka.csv")
@@ -1070,27 +1089,26 @@ Let's start out by seeing what the data look like.
 plot(hardness ~ density, data = hard)
 @
 
-This looks like a pretty clear relationship.
 We might be interested in doing two things with these data: determining if wood hardness (difficult to measure) is related to wood density (easy to measure), and, if so, predicting hardness from the density.
-For the first task, our (alternative) hypothesis here is that density is a good predictor of hardness.
-It is clear in this case from simply looking at a plot that this hypothesis is correct, and so the hypothesis test itself is not so interesting here.
-But the model can still be useful.
-And the general approach applies in cases where we are more interested in assessing the ``statistical significance'' of a relationship.
-And we may still be interested in hypothesis tests about the nature of the relationship between hardness and density.
-We want to build this model:
+Are these data experimental or observational?
+Try to fit an appropriate regression model to these data, and take a look at the residuals to check the structure.
+Can you improve it?
 
 \section{Problem 3. Fruit fly longevity and sexual activity}
-The data in the file fruitfly.csv are from an experiment on fruitfly longevity \citep{farawayLinearModels2005}.
-The  
+The data in the file fruitfly.csv are from an experiment on fruitfly longevity and are also from \citet{farawayLinearModels2005}.
+The original objective of this famous experiment was to assess the effect of sexual activity (manipulated by controlling the number of females placed with a single male, \texttt{activity} column) on fruitfly longevity (how long the flies live, \texttt{longevity} column).
+But longevity is known to be correlated with thorax length (\texttt{thorax} column}.
 
-    * Read the help file
-    * Are the data balanced?
-    * Plot the data in a way that helps you assess the effect of sexual activity on longevity while controlling for thorax length (feel free to copy or improve your own code from an earlier assignment)
-    * Carry out an ANOVA (with no covariate) to determine whether sexual activity has an effect on male fruit fly longevity.
-    Is there evidence of an effect? 
-    * Can you compare each level to a reference using contrasts? Can you change the reference level? How can you adjust the crtical $t-$value for the number of comparisons?
-    * What test is appropriate for evaluating all pairwise comparisons? If you use it, do you see differences?
-    * Now add thorax length as a covariate. How does it affect the results? Is there evidence that it should be included? If so, is there evidence that the slope (longevity vs. length) differs among activity levels? What should you conclude in the end about activity and longevity?
+<<>>=
+ff <- read.csv('data/fruitfly.csv')
+head(ff)
+@
+
+\begin{enumerate}
+  \item How might you plot these data to assess the effect of activity?
+  \item How can you fit a statistical model that utilizes the correlation with thorax length to increase power?
+  \item What approach should you use to compare the levels of \texttt{activity} to each other?
+\end{enumerate}
 
 \section{Problem 4: Growth and nitrate accumulation by \textit{Lemna minor}}
 
@@ -1117,7 +1135,6 @@ summary(lem)
 library(ggplot2)
 @
 
-
 <<>>=
 ggplot(lem, aes(medium, grow, colour = medium)) +
   geom_point() +
@@ -1135,9 +1152,6 @@ ggplot(lem, aes(NO3.med, NO3.accum, colour = medium)) +
   geom_point() +
   labs(x = 'Medium', y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
 @
-
-
-
 
 \bibliography{bib}
 
