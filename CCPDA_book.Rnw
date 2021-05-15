@@ -204,6 +204,7 @@ To make your life easier and your research reproducible, the data you generate a
 This refers to both organization \textit{within} files, and organization \textit{of} files.
 Data that are organized in a file in an umambiguous way are much more valuable than those that are not.
 The former facilitate repeatable research, and can vastly extend the life of your measurements.
+Sadly, a quick search of datasets available online (e.g., Mendeley Data, \url{https://data.mendeley.com/research-data/}) shows that poorly organized data are common.\footnote{Really it is a stretch to refer to some of the files available here as ``datasets''.}
 Of course, any electronic format is an improvement over data only stored on paper, but getting values into an electronic file is not in itself sufficient!
 
 The following guidelines for organization were originally developed for data that will be analyzed using R or similar software (see Section \ref{sec:softwaretype}), but even if you plan to carry out all data analysis using spreadsheet software, they are still useful.
@@ -444,24 +445,6 @@ So be modest, be careful, and accept that your results just may be wrong.
 \label{fig:kcomp}
 \end{figure}
 
-\section{Before you start}
-\label{sec:questions}
-Some of the issues introduced above should be considered whenever analyzing data.
-I can think of a few other points that are important as well.
-Before analyzing you data, make some plots, think about your experiment, and ask yourself the questions listed below.
-This list is not explained in great detail here, but it builds on the material from earlier sections and is referred to in the examples.
-
-\begin{enumerate}
-  \item What research question would you like you to answer? Is your sample appropriate for your question? The sample should reflect the population that you are interested in.
-  \item What is the unit of observation? What is the thing on which you made measurements? Clearly describe it. 
-  \item Do you have replication, and it is the right type? Are the observations independent, apart from whatever factor you would like to test? 
-  \item Are there systematic errors present in your data that could affect the results? If all obserations have the same systematic error (e.g., you made the measurements instead of your more experienced colleague) there is generally no reason to expect an effect on a comparison. If systematic error is associated with the experimental factor, however, you have a problem that statistical models cannot (easily) solve.
-  \item Have you plotted your data? Explain what you see. Do you really need to apply a statistical model?
-  \item Is your experimental factor continuous or categorical by nature? The answer determines the way you should analyze your data and interpret results.
-  \item What type of a relationship do you expect (or see) between your treatments and the response variable(s)? Additive? Multiplicative? How can your approach to data analysis accommodate this? Are transformations needed? Polynomials?
-  \item Is there any reason to expect that errors are not normally distributed? Should you consider a transformation? It has been argued that log-normal distributions are more common than normal \citep{diwakarEvaluationNormalLognormal2017}.  
-\end{enumerate}
-
 \section{Classical linear models}
 \label{sec:CLM}
 In this book I will present a single statistical method: linear regression, which we can perhaps more accurately refer to as a set of methods called ``classical linear models''
@@ -472,9 +455,10 @@ In this short book, I don't have the option of including many different approach
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
   \label{box:understand}
-  \textbf{Don't use methods you don't understand} \\
+  \textbf{Advice: Don't use methods you don't understand} \\
   Access to powerful statistical models has increased in recent years, and code from the Internet can easily be copied and modified to apply to a new problem.
-  However, I would advise you to avoid using statistical methods that you do not have some basic understanding of.
+  However, I would advise you to avoid using statistical methods that you do not understand.
+  In many cases, simpler methods will give clearer results and reduce the risk of mistakes.
 \end{numbox}
 \medskip
 \end{minipage}}
@@ -524,6 +508,9 @@ Of course all this applies to R, but formulas in Python are similar, and even fo
 \medskip
 \end{minipage}}
 
+Linear regression calculations can be used for analysis of variance (ANOVA).
+But predictor variables--categorical in this case, or factors--must be converted to dummy variables first.
+
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
   \label{box:dummy}
@@ -536,6 +523,25 @@ Of course all this applies to R, but formulas in Python are similar, and even fo
 \end{numbox}
 \medskip
 \end{minipage}}
+
+Transformations can make non-linear responses or non-normal error distributions easy to handle.
+In some cases, true non-linear regression is a better approach, however.
+
+\fbox{\begin{minipage}{43em}
+\begin{numbox}
+  \label{box:ssprob1}
+  \textbf{Logarithmic transformations} \\
+  A logarithmic (or log) transformation of the response variables does two important things to your model.
+  First, it makes the effects of predictor variables \textit{multiplicative} \citep{steelPrinciplesProceduresStatistics1997}, so a fixed absolute change in the predictor causes (or is correlated with) a relative change in the response.
+  Second, it changes the assumed error distribution from normal to lognormal.
+  In many cases both are needed together, conveniently.
+  If this is not the case, generalized linear models are an alternative \citep{mccullaghGeneralizedLinearModels1989}.
+  Predictor variables can also be transformed, giving three general types of model in addition to true ``linear'' models: log-linear, linear-log, log-log. 
+  Take care with interpretation of parameter values!
+\end{numbox}
+\end{minipage}}
+
+Polynomial regression can be useful for some non-linear responses.
 
 When you apply classical linear models, you should be aware of the assumptions that are employed every time model coefficients, \textit{p}-values, or confidence intervals are returned.
 
@@ -555,6 +561,25 @@ For linear regression in particular, there are two more assumptions.
 Some of these assumptions can be evaluated before even entering data, but others can only be evaluated after a model has been fit, somewhat ironically.
 Functions available for the R language make it very easy to evaluate assumptions, but even spreadsheets can be used for the task with a bit of effort.
 You can find an excellent introduction to the use of linear models by Julian Faraway, available for both R \citep{farawayLinearModels2005} and now Python as well \citep{farawayLinearModelsPython2020}.
+
+\section{Before you start}
+\label{sec:questions}
+Some of the issues introduced above should be considered whenever analyzing data.
+I can think of a few other points that are important as well.
+Before analyzing you data, make some plots, think about your experiment, and ask yourself the questions listed below.
+This list is not explained in great detail here, but it builds on the material from earlier sections and is referred to in the examples.
+
+\begin{enumerate}
+  \item What research question would you like you to answer? Is your sample appropriate for your question? The sample should reflect the population that you are interested in.
+  \item What is the unit of observation? What is the thing on which you made measurements? Clearly describe it. 
+  \item Do you have replication, and it is the right type? Are the observations independent, apart from whatever factor you would like to test? 
+  \item Are there systematic errors present in your data that could affect the results? If all obserations have the same systematic error (e.g., you made the measurements instead of your more experienced colleague) there is generally no reason to expect an effect on a comparison. If systematic error is associated with the experimental factor, however, you have a problem that statistical models cannot (easily) solve.
+  \item Have you plotted your data? Explain what you see. Do you really need to apply a statistical model?
+  \item Is your experimental factor continuous or categorical by nature? The answer determines the way you should analyze your data and interpret results.
+  \item What type of a relationship do you expect (or see) between your treatments and the response variable(s)? Additive? Multiplicative? How can your approach to data analysis accommodate this? Are transformations needed? Polynomials?
+  \item Is there any reason to expect that errors are not normally distributed? Should you consider a transformation? It has been argued that log-normal distributions are more common than normal \citep{diwakarEvaluationNormalLognormal2017}.  
+\end{enumerate}
+
 
 \section{Example 1: Removal efficiency in treatment wetlands}
 Let's, finally, work on an example.
@@ -918,8 +943,9 @@ It sure isn't linear.
 In fact, a common assumption is that Henry's law constant changes by a factor of 2 with every 10$^\circ$C change in temperature.
 The form of this statement suggests a logarithmic relationship, so we should log transform emission.
 How about air speed? 
-If we think about correlations for mass transfer coefficients, they are not linear.
-Here also, we could benefit from a transformation.
+We might expect that emission rate is at least partially controlled by the mass transfer coefficient from the surface.
+If we think about correlations for forced convection, the Reynolds number raised to the power of 0.5, i.e., $h \propto Re^{0.5}$.
+A log-log model can be used for this relationship, and we can get that by a log transformation of air speed in addition to emission.
 
 <<>>=
 ggplot(et, aes(log10(speed), log10(emis.n), colour = factor(temp.c))) + 
@@ -928,19 +954,6 @@ ggplot(et, aes(log10(speed), log10(emis.n), colour = factor(temp.c))) +
        colour = 'Temperature') +
   theme(legend.position = 'top')
 @
-
-\fbox{\begin{minipage}{43em}
-\begin{numbox}
-  \label{box:ssprob1}
-  \textbf{Log transformations} \\
-  A log transformation of the response variables does two important things to your model.
-  First, it makes the effects of predictor variables \textit{multiplicative} \citep{steelPrinciplesProceduresStatistics1997}, so a fixed absolute change in the predictor causes (or is correlated with) a relative change in the response.
-  Second, it changes the assumed error distribution from normal to lognormal.
-  In many cases both are needed together, conveniently.
-  If this is not the case, generalized linear models are an alternative \citep{mccullaghGeneralizedLinearModels1989}.
-\end{numbox}
-\end{minipage}}
-
 
 <<>>=
 mod1 <- lm(log10(emis.n) ~ temp.c + log10(speed), data = et)
@@ -1006,7 +1019,42 @@ ggplot(et, aes(log10(pred2), log10(emis.n), colour = factor(temp.c),
   theme(legend.position = 'top')
 @
 
+<<>>=
+plot(mod2, ask = FALSE)
+@
+
+
 \section{Problem 1. Inoculum effects on BMP}
+\citet{kochRoleInoculumOrigin2017} studied the effect of inoculum origin on biochemical methane potential (BMP) for four substrates.
+Data are given in the file BMP\_inoc.csv, where the unit of observation is a single BMP bottle.
+Take a look at the data and answer these questions:
+\begin{enumerate}
+  \item Did BMP depend on inoculum type?
+  \item Did any effect vary by substrate?
+\end{enumerate}
+
+<<>>=
+bi <- read.csv('data/BMP_inoc.csv')
+@
+
+<<>>=
+bi
+@
+
+<<>>=
+library(tidyr)
+@
+
+<<>>=
+bil <- gather(bi, key = 'rep', value = 'BMP', contains('BMP'))
+head(bil)
+@
+
+<<>>=
+ggplot(bil, aes(substrate, BMP, colour = inoc)) +
+  geom_jitter(height = 0)
+@
+
 
 \section{Problem 2. Wood hardness and density}
 Let's read in a data set on the hardness of some Australian woods.
@@ -1032,9 +1080,8 @@ And we may still be interested in hypothesis tests about the nature of the relat
 We want to build this model:
 
 \section{Problem 3. Fruit fly longevity and sexual activity}
-The data in the file fruitfly.csv are from an experiment on fruitfly longevity.\footnote{And were copied from the faraway package in R.}
-
-Check out the data in the data frame `fruitfly`, which is part of the faraway package.
+The data in the file fruitfly.csv are from an experiment on fruitfly longevity \citep{farawayLinearModels2005}.
+The  
 
     * Read the help file
     * Are the data balanced?
@@ -1044,6 +1091,53 @@ Check out the data in the data frame `fruitfly`, which is part of the faraway pa
     * Can you compare each level to a reference using contrasts? Can you change the reference level? How can you adjust the crtical $t-$value for the number of comparisons?
     * What test is appropriate for evaluating all pairwise comparisons? If you use it, do you see differences?
     * Now add thorax length as a covariate. How does it affect the results? Is there evidence that it should be included? If so, is there evidence that the slope (longevity vs. length) differs among activity levels? What should you conclude in the end about activity and longevity?
+
+\section{Problem 4: Growth and nitrate accumulation by \textit{Lemna minor}}
+
+Duckweeds are very tiny floating plants that can be used for wastewater treatment and recovery of nitrogen.
+Harvested material can be used as an animal feed.
+\citet{devlamynckEffectGrowthMedium2020} measured biomass production and nitrate accumulation in a duckweed species \textit{Lemna minor}. 
+The data are in lemna.csv.
+Use them to explore the following questions.
+\begin{enumerate}
+  \item Did medium affect growth (\texttt{grow})?
+  \item Did medium affect \ce{NO3-} accumulation (\texttt{NO3.accum})?
+  \item Is \ce{NO3-} accumulation related to \ce{NO3-} concentration in the medium (\texttt{NO3.med})?
+\end{enumerate}
+
+<<>>=
+lem <- read.csv('data/lemna.csv')
+@
+
+<<>>=
+summary(lem)
+@
+
+<<>>=
+library(ggplot2)
+@
+
+
+<<>>=
+ggplot(lem, aes(medium, grow, colour = medium)) +
+  geom_point() +
+  labs(x = 'Medium', y = expression('Growth rate'~(mg~m^'-2'~d^'-1')))
+@
+
+<<>>=
+ggplot(lem, aes(medium, NO3.accum, colour = medium)) +
+  geom_point() +
+  labs(x = 'Medium', y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
+@
+
+<<>>=
+ggplot(lem, aes(NO3.med, NO3.accum, colour = medium)) +
+  geom_point() +
+  labs(x = 'Medium', y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
+@
+
+
+
 
 \bibliography{bib}
 
