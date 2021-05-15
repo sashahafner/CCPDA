@@ -78,7 +78,7 @@ I started working regularly with the R language and environment in 2007, and mos
 I have written several packages in R.\footnote{Including two on CRAN: biogas, for data processing and more in biogas research, and monitoR, for automated identification of animal vocalizations. See \url{https://cran.r-project.org/web/packages/available_packages_by_name.html} for these, or \url{https://github.com/sashahafner} for others.}
 
 For better or worse, I do not have a degree in statistics nor one in programming.
-I am sure that contributes to some confusion on statistical theory here and there, but for now let's pretend it is an advantage: it means I will focus on practical statistics that are relatively accessible.
+I am sure that contributes to some confusion on advanced statistical theory here and there, but it also comes with an advantage: it means I will focus on practical statistics that are relatively accessible.
 
 \section{Data analysis steps}
 \label{sec:steps}
