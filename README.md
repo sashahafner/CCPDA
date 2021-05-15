@@ -7,4 +7,4 @@ All the data used in the examples and problems are available in the data directo
 If you find this book useful, you can use the "watch" and "star" options at the upper right to keep up with development.
 
 # Requests and feedback
-Please use the "Issues" page to provide feedback or make a request. If your comment is not related to an existing issue, simply create a new issue.
+Please use the [Issues page](https://github.com/sashahafner/CCPDA/issues) to provide feedback or make a request. If your comment is not related to an existing issue, simply create a new issue.
