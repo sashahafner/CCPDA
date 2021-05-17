@@ -3,6 +3,8 @@ This short free book provides a concise introduction to data analysis meant to a
 
 All the data used in the examples and problems are available in the data directory. You can download the data files individually, or get everything [here](https://github.com/sashahafner/CCPDA/archive/refs/heads/master.zip) or using the green "code" link above.
 
+You can download solutions to the problems [here](https://github.com/sashahafner/CCPDA/raw/master/solutions.pdf)
+
 # Updates
 If you find this book useful, you can use the "watch" and "star" options at the upper right to keep up with development.
 
