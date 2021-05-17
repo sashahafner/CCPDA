@@ -26,7 +26,7 @@
 \newcounter{numbox}[]
 \newenvironment{numbox}[0]{\refstepcounter{numbox}\par\medskip \textbf{Box~\thenumbox #.} \rmfamily}{}
 
-\title{A Crash Course in Practical Data Analysis}
+\title{A Crash Course in Practical Data Analysis\footnote{For the latest version, visit \url{https://github.com/sashahafner/CCPDA}}}
 \author{Sasha Hafner\footnote{\texttt{sasha@hafnerconsulting.com}}}
 \begin{document}
 \maketitle
@@ -524,7 +524,7 @@ But predictor variables--categorical in this case, or factors--must be converted
 \begin{numbox}
   \label{box:dummy}
   \textbf{What are dummy variables?} \\
-  Continuous predictor variables can be used without changes when using regression.
+  Continuous predictor variables can be used as-is in regression.
   But factors (categorical variables) don't work like this.
   Instead, with $n$ levels, at least $n-1$ binary (typically values of 0 or 1) ``dummy variables'' are used.
   In effect, each level of the factor is turned into its own variable.
@@ -881,7 +881,7 @@ This is precisely what was later done, with comparisons made within and even amo
 Could this analysis have been done using a spreadsheet?
 Yes, but with some difficulty, and an unforunate lack of clarity and reproducibility.
 In LibreOffice Calc, it is necessary to first calculate the response variable (relative difference), as in the R code above, but then to add columns with ``dummy variables'' for substrate.
-This is shown in the figure below (Fig. \ref{fig:bmpspreadsheet1}), and also in the file ``BMP\_comp.ods'' in the spreadsheets directory.
+This is shown in Fig. \ref{fig:bmpspreadsheet1}, and also in the file ``BMP\_comp.ods'' in the spreadsheets directory.
 
 \begin{figure}
 \includegraphics[width = 150mm]{images/BMP_comp_spreadsheet.png}
@@ -890,7 +890,7 @@ This is shown in the figure below (Fig. \ref{fig:bmpspreadsheet1}), and also in 
 \end{figure}
 
 To actually fit the regression model, the ``Data'' menu is selected, then ``Statistics'', and finally, ``Regression''.
-Variables and options are selected as shown below (Fig. \ref{fig:bmpspreadsheetanalysis}).
+Variables and options are selected are shown in Fig. \ref{fig:bmpspreadsheetanalysis}.
 
 \begin{figure}
 \includegraphics[width = 70mm]{images/BMP_comp_spreadsheet_analysis.png}
@@ -1035,6 +1035,15 @@ ggplot(et, aes(log10(pred2), log10(emis.n), colour = factor(temp.c),
 plot(mod2, ask = FALSE)
 @
 
+<<>>=
+ggplot(et, aes(log10(speed), resid2, colour = factor(temp.c))) + 
+  geom_point() +
+  labs(x = 'Log10 air speed (m/s)', y = 'Residuals', 
+       colour = 'Temperature') +
+  theme(legend.position = 'top')
+@
+
+That's an informative plot.
 
 \section{Problem 1. Inoculum effects on BMP}
 \citet{kochRoleInoculumOrigin2017} studied the effect of inoculum origin on biochemical methane potential (BMP) for four substrates.
