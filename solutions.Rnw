@@ -1,0 +1,421 @@
+% Note to self: if tools::texi2pdf ever hangs, delete all the LaTeX files (excluding Rnw of course)!!!
+\documentclass{article}
+
+\usepackage{natbib}
+\bibliographystyle{abbrvnat}
+\usepackage{textcomp}
+\usepackage[hang, flushmargin]{footmisc} 
+\usepackage[version = 3]{mhchem} 
+\usepackage[nottoc, numbib]{tocbibind} % So refs section is included in TOC
+\usepackage{hyperref} % Must be loaded as the last package
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{fancyvrb}
+\hypersetup{colorlinks}
+
+% To try to reduce margins
+\setlength{\oddsidemargin}{10pt}
+\setlength{\evensidemargin}{10pt}
+\setlength{\topmargin}{7pt}
+\setlength{\textwidth}{6in}
+% And more on that. . . this is a mess of mixed up code
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+% Defined numbered custom text box environment
+\newcounter{numbox}[]
+\newenvironment{numbox}[0]{\refstepcounter{numbox}\par\medskip \textbf{Box~\thenumbox #.} \rmfamily}{}
+
+\title{A Crash Course in Practical Data Analysis\footnote{For the latest version, visit \url{https://github.com/sashahafner/CCPDA}}}
+\author{Sasha Hafner\footnote{\texttt{sasha@hafnerconsulting.com}}}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\setlength{\parskip}{10pt plus 1pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\maketitle
+
+\newpage
+
+<<setup, include = FALSE, cache = FALSE>>= 
+library(knitr)
+options(useFancyQuotes = FALSE)
+opts_chunk$set(error = TRUE, comment = "#", out.height = "4.0in", out.width = "4.4in", fig.height = 5, fig.width = 5.5, fig.align = "center", cache = TRUE)
+options(tidy = TRUE, width = 70)
+rm(list = ls())
+@
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Packages and functions}
+
+<<>>=
+source('functions/dfsumm.R')
+@
+
+<<>>=
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+@
+
+\section{Problem 1. Inoculum effects on BMP}
+\citet{kochRoleInoculumOrigin2017} studied the effect of inoculum origin on biochemical methane potential (BMP) for four substrates.
+Data are given in the file BMP\_inoc.csv, where the unit of observation is a single BMP bottle.
+Take a look at the data and answer these questions:
+\begin{enumerate}
+  \item Did BMP depend on inoculum type?
+  \item Did any effect vary by substrate?
+\end{enumerate}
+
+The original data are in a intermediate structure, with replicates across columns.
+
+<<>>=
+bi <- read.csv('data/BMP_inoc.csv')
+@
+
+<<>>=
+bi
+@
+
+This structure could work well in a spreadsheet analysis.
+For analysis in R, the structure can be changed to long using the \texttt{gather()} function.
+
+<<>>=
+bil <- gather(bi, key = 'rep', value = 'BMP', contains('BMP'))
+head(bil)
+dim(bil)
+dfsumm(bil)
+@
+
+Here are the values, with a single point representing a BMP value from a single bottle.
+
+<<>>=
+ggplot(bil, aes(substrate, BMP, colour = inoc)) +
+  geom_jitter(height = 0)
+@
+
+Calculate means and standard deviation.
+
+<<>>=
+bm <- as.data.frame(summarise(group_by(bil, substrate, inoc), BMP.mn = mean(BMP), 
+                              BMP.sd = sd(BMP), n = length(BMP)))
+bm$BMP.se = bm$BMP.sd / sqrt(bm$n)
+
+bm
+@
+
+And plot them.
+
+<<>>=
+ggplot(bm, aes(substrate, BMP.mn, fill = inoc)) +
+  geom_bar(position = position_dodge(), stat = 'identity') +
+  geom_errorbar(aes(ymin = BMP.mn - BMP.se, ymax = BMP.mn + BMP.se), position = position_dodge(0.9), width = 0.2) +
+  labs(x = 'Substrate', y = 'BMP (mL/g)', fill = 'Inoculum source')
+@
+
+Here is a case where we really do need a statistical analysis to help understand the data.
+
+<<>>=
+m1 <- lm(BMP ~ substrate * inoc, data = bil)
+summary(m1)
+anova(m1)
+@
+
+There is clear evidence of an inoculum effect, and a slight suggestion of a possible interaction.
+
+<<>>=
+m2 <- aov(BMP ~ substrate * inoc, data = bil)
+summary(m2)
+TukeyHSD(m2, 'inoc')
+@
+
+<<>>=
+plot(m2, ask = FALSE)
+@
+
+
+<<>>=
+m3 <- aov(log10(BMP) ~ substrate * inoc, data = bil)
+summary(m3)
+(tr <- TukeyHSD(m3, 'inoc'))
+100 * (10^tr$inoc[, 'diff'] - 1)
+@
+
+<<>>=
+plot(m3, ask = FALSE)
+@
+
+We can conclude that the BWTP inoculum resulted in BMP values about 4-6\% higher than the other two.
+
+\section{Problem 2. Wood hardness and density}
+
+<<>>= 
+hard <- read.csv("data/janka.csv")
+dfsumm(hard)
+@
+
+Let's start out by seeing what the data look like.
+
+<<>>= 
+plot(hardness ~ density, data = hard)
+@
+
+We might be interested in doing two things with these data: determining if wood hardness (difficult to measure) is related to wood density (easy to measure), and, if so, predicting hardness from the density.
+Are these data experimental or observational?
+Try to fit an appropriate regression model to these data, and take a look at the residuals to check the structure.
+Can you improve it?
+
+<<>>= 
+m1 <- lm(hardness ~ density, data = hard)
+summary(m1)
+hard$pred1 <- predict(m1)
+hard$resid1 <- resid(m1)
+@
+
+
+<<>>= 
+plot(hardness ~ density, data = hard)
+abline(m1)
+@
+
+<<>>= 
+plot(resid1 ~ density, data = hard)
+abline(h = 0)
+@
+
+<<>>= 
+m2 <- lm(hardness ~ poly(density, 3), data = hard)
+summary(m2)
+m2 <- lm(hardness ~ poly(density, 2), data = hard)
+hard$pred2 <- predict(m2)
+hard$resid2 <- resid(m2)
+@
+
+<<>>= 
+plot(hardness ~ density, data = hard)
+abline(m1, col = 'red')
+lines(pred2 ~ density, data = hard, col = 'blue')
+@
+
+<<>>= 
+plot(resid1 ~ density, data = hard, col = 'red')
+points(resid2 ~ density, data = hard, col = 'blue')
+abline(h = 0)
+@
+
+
+<<>>= 
+m3 <- lm(log10(hardness) ~ poly(density, 2), data = hard)
+summary(m3)
+hard$pred3 <- 10^predict(m3)
+hard$resid3 <- hard$pred3 - hard$hardness
+@
+
+
+<<>>= 
+plot(hardness ~ density, data = hard)
+abline(m1, col = 'red')
+lines(pred2 ~ density, data = hard, col = 'blue')
+lines(pred3 ~ density, data = hard, col = 'orange')
+@
+
+<<>>= 
+plot(resid1 ~ density, data = hard, col = 'red')
+points(resid2 ~ density, data = hard, col = 'blue')
+points(resid3 ~ density, data = hard, col = 'orange')
+abline(h = 0)
+@
+
+\section{Problem 3. Fruit fly longevity and sexual activity}
+The data in the file fruitfly.csv are from an experiment on fruitfly longevity and are also from \citet{farawayLinearModels2005}.
+The original objective of this famous experiment was to assess the effect of sexual activity (manipulated by controlling the number of females placed with a single male, \texttt{activity} column) on fruitfly longevity (how long the flies live, \texttt{longevity} column).
+But longevity is known to be correlated with thorax length (\texttt{thorax} column}.
+
+<<>>=
+ff <- read.csv('data/fruitfly.csv')
+head(ff)
+@
+
+\begin{enumerate}
+  \item How might you plot these data to assess the effect of activity?
+  \item How can you fit a statistical model that utilizes the correlation with thorax length to increase power?
+  \item What approach should you use to compare the levels of \texttt{activity} to each other?
+\end{enumerate}
+
+<<>>=
+ggplot(ff, aes(thorax, longevity, colour = activity)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  labs(x = 'Thorax length (mm)', y = 'Longevity (days)', colour = 'Activity')
+@
+
+<<>>=
+ggplot(ff, aes(thorax, longevity, colour = activity)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x = 'Thorax length (mm)', y = 'Longevity (days)', colour = 'Activity')
+@
+
+<<>>=
+ggplot(ff, aes(thorax, longevity, colour = activity)) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  labs(x = 'Thorax length (mm)', y = 'Longevity (days)', colour = 'Activity')
+@
+
+<<>>=
+levels(ff$activity)
+@
+
+First level will be reference. 
+Let's change it to isolated.
+
+<<>>=
+ff$activity <- relevel(ff$activity, ref= 'isolated')
+@
+
+<<>>=
+m1 <- lm(longevity ~ activity * thorax, data = ff)
+anova(m1)
+@
+
+<<>>=
+m2 <- lm(longevity ~ activity + thorax, data = ff)
+anova(m2)
+summary(m2)
+@
+
+We can use Bonferroni adjustment, 0.05 / 5 = 0.01.
+So only \texttt{high} level is clearly different--20 days shorter longevity, which is a lot!
+
+<<>>=
+confint(m2)
+@
+
+Strange that ``many'' level is so different from others.
+
+
+<<>>=
+confint(m2)
+@
+
+\section{Problem 4: Growth and nitrate accumulation by \textit{Lemna minor}}
+
+Duckweeds are very tiny floating plants that can be used for wastewater treatment and recovery of nitrogen.
+Harvested material can be used as an animal feed.
+\citet{devlamynckEffectGrowthMedium2020} measured biomass production and nitrate accumulation in a duckweed species \textit{Lemna minor}. 
+The data are in lemna.csv.
+Use them to explore the following questions.
+\begin{enumerate}
+  \item Did medium affect growth (\texttt{grow})?
+  \item Did medium affect \ce{NO3-} accumulation (\texttt{NO3.accum})?
+  \item Is \ce{NO3-} accumulation related to \ce{NO3-} concentration in the medium (\texttt{NO3.med})?
+\end{enumerate}
+
+<<>>=
+lem <- read.csv('data/lemna.csv')
+@
+
+<<>>=
+summary(lem)
+@
+
+<<>>=
+library(ggplot2)
+@
+
+<<>>=
+ggplot(lem, aes(medium, grow, colour = medium)) +
+  geom_point() +
+  labs(x = 'Medium', y = expression('Growth rate'~(mg~m^'-2'~d^'-1')))
+@
+
+<<>>=
+ggplot(lem, aes(medium, NO3.accum, colour = medium)) +
+  geom_point() +
+  labs(x = 'Medium', y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
+@
+
+<<>>=
+ggplot(lem, aes(NO3.med, NO3.accum, colour = medium)) +
+  geom_point() +
+  labs(x = expression(NO[3]^'-'~'in medium'~(mg~kg^'-1')), y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
+@
+
+First growth.
+Check plot--no clear effect, no stats needed.
+We can calculate average and sd at least.
+
+<<>>=
+lemsum <- as.data.frame(summarise(group_by(lem, medium), 
+                                  grow.mean = mean(grow), grow.sd = sd(grow), 
+                                  NO3.med.mean = mean(NO3.med), NO3.med.sd = sd(NO3.med), 
+                                  NO3.accum.mean = mean(NO3.accum), 
+                                  NO3.accum.sd = sd(NO3.accum))) 
+
+lemsum
+@
+
+For nitrate accumulation, there seem to be effects.
+
+<<>>=
+levels(lem$medium)
+lem$medium <- relevel(lem$medium, ref= 'R')
+@
+
+<<>>=
+m1 <- lm(NO3.accum ~ medium, data = lem)
+anova(m1)
+summary(m1)
+@
+
+As expected, very clear differences.
+Does it matter exactly which ones differed?
+Seems everything was higher than R.
+
+<<>>=
+m2 <- aov(NO3.accum ~ medium, data = lem)
+anova(m2)
+@
+
+<<>>=
+TukeyHSD(m2)
+@
+
+
+<<>>=
+ggplot(lem, aes(NO3.med, NO3.accum, colour = medium)) +
+  geom_point() +
+  labs(x = expression(NO[3]^'-'~'in medium'~(mg~kg^'-1')), y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
+@
+
+<<>>=
+ggplot(lemsum, aes(NO3.med.mean, NO3.accum.mean)) +
+  geom_point() +
+  geom_smooth() +
+  labs(x = expression(NO[3]^'-'~'in medium'~(mg~kg^'-1')), y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
+@
+
+Whoa! 
+Overfitting by default!
+
+<<>>=
+ggplot(lemsum, aes(NO3.med.mean, NO3.accum.mean)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ poly(x, 2)) +
+  labs(x = expression(NO[3]^'-'~'in medium'~(mg~kg^'-1')), y = expression(NO[3]^'-'~'accumulation'~(mg~kg^'-1')))
+@
+
+
+
+
+\bibliography{bib}
+
+\end{document}
