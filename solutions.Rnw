@@ -26,7 +26,7 @@
 \newcounter{numbox}[]
 \newenvironment{numbox}[0]{\refstepcounter{numbox}\par\medskip \textbf{Box~\thenumbox #.} \rmfamily}{}
 
-\title{A Crash Course in Practical Data Analysis\footnote{For the latest version, visit \url{https://github.com/sashahafner/CCPDA}}}
+\title{Solutions to problems from: A Crash Course in Practical Data Analysis\footnote{For the latest version, visit \url{https://github.com/sashahafner/CCPDA}}}
 \author{Sasha Hafner\footnote{\texttt{sasha@hafnerconsulting.com}}}
 \begin{document}
 \maketitle
