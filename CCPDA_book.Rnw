@@ -68,7 +68,7 @@ I hope it helps at least a dozen readers.
 
 There are no real prerequisites for the material presented in this book, although some coursework in introductory statistics and at least a little experience with spreadsheets and some programming language would be helpful.
 The examples I present were carried out using R and LibreOffice Calc, but other tools would work as well.
-If you find that even the you cannot understand the output from the statistical models used here, or that the concepts are too complicated, spend some time with a good book on statistics first and then come back.
+If you find that you cannot understand the output from the statistical models used here, or that the concepts are too complicated, spend some time with a good book on statistics first and then come back.
 I can recommend \citet{zarBiostatisticalAnalysis1999}.
 
 Much of the material you will see in the following pages is based on my own opinion, so I think it is fair for you to ask: ``Who the hell are you?''
@@ -78,7 +78,7 @@ I started working regularly with the R language and environment in 2007, and mos
 I have written several packages in R.\footnote{Including two on CRAN: biogas, for data processing and more in biogas research, and monitoR, for automated identification of animal vocalizations. See \url{https://cran.r-project.org/web/packages/available_packages_by_name.html} for these, or \url{https://github.com/sashahafner} for others.}
 
 For better or worse, I do not have a degree in statistics nor one in programming.
-I am sure that contributes to some confusion on advanced statistical theory here and there, but it also comes with an advantage: it means I will focus on practical statistics that are relatively accessible.
+I am definitely not the best person to explain advanced statistical theory, but this background comes with an advantage: it means I will focus on practical statistics that are relatively accessible.
 
 \section{Data analysis steps}
 \label{sec:steps}
@@ -124,7 +124,7 @@ This book will cover all of these steps in at least a \textit{little} detail.
 \section{Spreadsheets and programming languages}
 \label{sec:softwaretype}
 R (\url{https://www.r-project.org/}) is a programming language and a software environment for statistical computing (Fig. \ref{fig:rstudio1}).
-It happens to be my favorite tool for data analysis, partially because it is really good, and partially because I was, by change, introduced to it a decade or two ago.
+It happens to be my favorite tool for data analysis, partially because it is really good, and partially because I was, by chance, introduced to it a decade or two ago.
 Python (\url{https://www.python.org/}) is also quite popular.
 Matlab has its own advantages, and is popular in academic settings, where it may actually be required for some course work. 
 But it is not free or open-source, and it would not be unfair to say that for data analysis, it has been eclipsed by open-source alternatives.
@@ -152,8 +152,8 @@ Challenges come later.
 In contrast, gettings started with a new programming language is not always easy.
 Also, Excel and other spreadsheet programs are cell-based. 
 Users actually see and can manually manipulate their data.
-Use of a programming language requires some ability to visualize data objects and their manipulation and relate these to symbolic variable names and commands.
-This isn't trivial, but is a very powerful approach.
+Use of a programming language requires some ability to meantally visualize data objects and their manipulation and relate these objects to symbolic variable names and commands.
+All this isn't trivial, but ultimately programming languages provide a lot of power for data analysis.
 
 Based on my experience, I recommend spreadsheets for data entry and storage.
 Anything else related to data analysis is better done in R or Python. 
@@ -166,7 +166,7 @@ Anything else related to data analysis is better done in R or Python.
   Results are generally dependent on many formulas distributed among many cells, each with their own formulas.
   This feature makes it more difficult to write flexible ``programs'' and to find mistakes.
   In contrast, multiple rows of data are typically changed by a single line of R or Python code.
-  Formulas in a single cell may refer to multiple cells, but it is difficult to make these references \textit{scalable}.
+  Formulas in a single spreadsheet cell may refer to multiple cells, but it is difficult to make these references \textit{scalable}, i.e., to still work correctly when the input data change by getting more variables or more observations.
 \end{numbox}
 \end{minipage}}
 
@@ -193,6 +193,7 @@ Python and R interpreters (the software that actually reads your code and does w
 
 I know I won't convince many of you who are wedded to Excel to invest the necessary effort required for learning R or Python, and I would not criticize you for that decision.
 But I do strongly encourage you to follow the advice in Section \ref{sec:tracking}.
+And I might gently suggest that the time you would spend learning a little R or Python may quickly be repaid the first time you need to repeat data manipulation of a large dataset.
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
@@ -352,7 +353,7 @@ So there is a clear difference, right?!
 No! There is always a difference, and we might need inferential statistics to determine \textit{if a difference really means anything}.
 In this case, we can immediately see that there is no meaningful difference without even applying a statistical model.
 Why?
-Because the size of the difference is small compared to the random error.
+Because the size of the difference is small compared to the random error.\footnote{And we have a small sample. With a large number of observations we might be able to confirm the presence of a difference.}
 There are no statistics needed to tell us this, making this example the first case where statistics are \textbf{not} useful.
 
 The ``population'' about which we make inferences can be challenging to think about.
@@ -850,7 +851,7 @@ ggplot(bw, aes(substrate, rdiff, colour = substrate)) +
 @
 
 Here as well, there is no evidence of a consistent difference between the methods, possibly excluding ethanol.
-We can still conclude then, without fitting a statistical model, that there is no significant evidence of a systematic difference between the methods.
+We can still conclude then, without fitting a statistical model, that there is no real evidence of a systematic difference between the methods.
 
 But, maybe we would like to say how large a difference \textit{might} exist.
 We could use these data for this, and can (finally) apply a statistical model!
@@ -876,7 +877,7 @@ confint(mod1)
 We can say then, that at the 95\% confidence, any difference between the methods is probably smaller than 17\%, with the exception of ethanol.
 That is useful!
 If we want more information or a better estimate of any probable difference between the methods, we would need to carry out additional experiments.
-This is precisely what was later done, with comparisons made within and even among other laboratories, with measurements made by differenet technicians \citep{justesenDevelopmentValidationLowcost2019}.
+For this new method, this is precisely what was later done, with comparisons made within and even among other laboratories, with measurements made by differenet technicians \citep{justesenDevelopmentValidationLowcost2019}.
 
 Could this analysis have been done using a spreadsheet?
 Yes, but with some difficulty, and an unforunate lack of clarity and reproducibility.
