@@ -419,7 +419,7 @@ When a measured difference is much larger than the random error, there may not b
 This is common in engineering, where most experiments are designed (and resulting data are experimental and not observational) and treatments have large effects.
 
 Even when statistics are useful, they are not the complete solution.
-The \textit{magnitude} or the difference is more important.
+The \textit{magnitude} of the difference is more important.
 In fact, we can turn the basic idea of inferential statistics on its head for many types of experiments by considering this: What is the probability that any two physical, chemical, or biological treatments you might work with to improve some process have the \textit{exact} same effect on the process?
 Essentially nill. 
 It is the magnitude of the difference that is important, so we must remember to consider both the size of the difference and the evidence we have about whether it reflects a true difference between treatments etc.
