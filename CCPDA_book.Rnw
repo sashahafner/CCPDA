@@ -145,7 +145,7 @@ But it is not free or open-source, and it would not be unfair to say that for da
 \label{fig:rstudio1}
 \end{figure}
 
-But I would guess that Microsoft Excel, a spreadsheet program, is more popular by orders of magnitude.\footnote{I don't know if anyone has tried to make an estimate.}
+But I would guess that Microsoft Excel, a spreadsheet program, is more popular by orders of magnitude.\footnote{The number of users is somewhere around 1 billion (\url{https://askwonder.com/research/number-google-sheets-users-worldwide-eoskdoxav}, while R and Python are probably below 10 million (\url{https://www.datanami.com/2019/08/15/is-python-strangling-r-to-death/}), although both estimates are both outdated and originally imprecise.}
 Why?
 It is probably partially related to history, but one reason may be that it is very simple to \textit{start} using Excel.
 Challenges come later.
