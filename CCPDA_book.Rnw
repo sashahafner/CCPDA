@@ -27,7 +27,7 @@
 \newenvironment{numbox}[0]{\refstepcounter{numbox}\par\medskip \textbf{Box~\thenumbox #.} \rmfamily}{}
 
 \title{A Crash Course in Practical Data Analysis\footnote{For the latest version, visit \url{https://github.com/sashahafner/CCPDA}}}
-\author{Sasha Hafner\footnote{\texttt{sasha@hafnerconsulting.com}}}
+\author{Sasha Hafner\footnote{\texttt{sasha.hafner@bce.au.dk}}}
 \begin{document}
 \maketitle
 \thispagestyle{empty}
@@ -73,10 +73,9 @@ I can recommend \citet{zarBiostatisticalAnalysis1999}.
 
 Much of the material you will see in the following pages is based on my own opinion, so I think it is fair for you to ask: ``Who the hell are you?''
 I am a scientist with training in biology and engineering, with quite a bit of practical experience in data analysis. 
-Presently I work on problems in environmental engineering from a modeling and data analysis perspective through my consultancy\footnote{More details at \url{www.hafnerconsulting.com}.}.
-I started working regularly with the R language and environment in 2007, and most weeks work with R daily.
+Presently I work on problems in environmental engineering from a modeling and data analysis perspective in the Department of Biological and Chemical Engineering at Aarhus University\footnote{\url{https://bce.au.dk/en/research/key-areas-in-research-and-development/environmental-engineering/}}.
+I started working regularly with the R language and environment in 2007, and still use R daily most weeks.
 I have written several packages in R.\footnote{Including two on CRAN: biogas, for data processing and more in biogas research, and monitoR, for automated identification of animal vocalizations. See \url{https://cran.r-project.org/web/packages/available_packages_by_name.html} for these, or \url{https://github.com/sashahafner} for others.}
-
 For better or worse, I do not have a degree in statistics nor one in programming.
 I am definitely not the best person to explain advanced statistical theory, but this background comes with an advantage: it means I will focus on practical statistics that are relatively accessible.
 
@@ -145,18 +144,21 @@ But it is not free or open-source, and it would not be unfair to say that for da
 \label{fig:rstudio1}
 \end{figure}
 
-But I would guess that Microsoft Excel, a spreadsheet program, is more popular by orders of magnitude.\footnote{The number of users is somewhere around 1 billion (\url{https://askwonder.com/research/number-google-sheets-users-worldwide-eoskdoxav}, while R and Python are probably below 10 million (\url{https://www.datanami.com/2019/08/15/is-python-strangling-r-to-death/}), although both estimates are both outdated and originally imprecise.}
+But I would guess that Microsoft Excel, a spreadsheet program, is more popular by orders of magnitude.\footnote{The number of users is somewhere around 1 billion (\url{https://askwonder.com/research/number-google-sheets-users-worldwide-eoskdoxav}, while R and Python are probably below 10 million (\url{https://www.datanami.com/2019/08/15/is-python-strangling-r-to-death/}), although both estimates are both outdated and were originally imprecise anyway.}
 Why?
 It is probably partially related to history, but one reason may be that it is very simple to \textit{start} using Excel.
 Challenges come later.
 In contrast, gettings started with a new programming language is not always easy.
 Also, Excel and other spreadsheet programs are cell-based. 
 Users actually see and can manually manipulate their data.
-Use of a programming language requires some ability to meantally visualize data objects and their manipulation and relate these objects to symbolic variable names and commands.
+Use of a programming language requires some ability to mentally visualize data objects and their manipulation and relate these objects to symbolic variable names and commands.
 All this isn't trivial, but ultimately programming languages provide a lot of power for data analysis.
 
 Based on my experience, I recommend spreadsheets for no more than data entry and storage.
 Anything else related to data analysis is better done in R or Python. 
+R had a focus on data analysis and statistical modelling from the start.
+In a comparison to Python this history still shows, and it is arguably easier to do statistical modeling in R.
+But Python is much more popular\footnote{Most popular programming language in fact, at least in early 2024: \url{https://www.tiobe.com/tiobe-index/}}, although perhaps not for statistical modeling.
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
@@ -218,7 +220,7 @@ This refers to both organization \textit{within} files, and organization \textit
 Data that are organized in a file in an umambiguous way are much more valuable than those that are not.
 They facilitate repeatable research and can vastly extend the useful life of your hard-earned measurements.
 Sadly, a quick search of datasets available online (e.g., Mendeley Data, \url{https://data.mendeley.com/research-data/}) shows that poorly organized and poorly described data are common.\footnote{Really it is a stretch to refer to some of the files available here as ``datasets''.}
-Of course, any electronic format is an improvement over data only stored on paper, but getting values into an electronic file is not in itself sufficient!
+Of course, any electronic format is an improvement over data only stored on paper, but getting values into an electronic file is not in itself sufficient.
 
 The following guidelines for data organization (Box \ref{box:fileorg}) were originally developed for data that will be analyzed using R, Python, or similar software (see Section \ref{sec:softwaretype}), but even if you plan to carry out all data analysis using spreadsheet software, they are still useful.
 
@@ -264,7 +266,7 @@ The header in row 3 contains short names easy to use in code.
 
 Sometimes researchers have a inclination to avoid repetition in data files, and so find the value in column B in Fig. \ref{fig:silagerestruct} to be inappropriate.
 Perhaps this has to do with a focus on data entry efficiency.
-If you have this perspective, please try to get over it!
+If you have this perspective, please try to get over it.
 For data files, the goal isn't to produce something beautiful.
 
 Data that don't follow some of these rules can sometimes be restructured (reshaped) using R, Python, etc.
@@ -312,7 +314,7 @@ These are especially useful if you collaborate with others on data analysis.
 
 Spreadsheets do not facilite repeating or checking any of the steps listed above, but this problem is especially accute for manual data manipulation.
 For calculations underlying data processing and analysis, sure, one could find the formulas underlying the calculations, and follow the cell references to check everything. 
-But there are so many damn cells, each with its own formula!
+But there are so many damn cells, each with its own formula.
 Code, in contrast, is concise by its nature. 
 You can find a bit more discussion on this difference in Section \ref{sec:softwaretype}.
 If you insist on sticking with a spreadsheet for data analysis, what can you do?
@@ -353,7 +355,7 @@ stripchart(y ~ x, data = d, vertical = TRUE, method = 'jitter', xlab = '', ylab 
 \end{figure}
 
 Our mean values in this case are \Sexpr{signif(mean(subset(d, x == 'Reference')$y), 3)} (reference) and \Sexpr{signif(mean(subset(d, x == 'Supa-dupa treatment')$y), 3)} (the new treatment).
-So there is a clear difference, right?!
+So there is a clear difference, right?
 No! There is always a difference, and we might need inferential statistics to determine \textit{if a difference really means anything}.
 In this case, we can immediately see that there is no meaningful difference without even applying a statistical model.
 Why?
@@ -402,7 +404,7 @@ Random error is an integral part of inferential statistics, but systematic error
 In applying statistical models we commonly assume that individual observations are \textit{independent} (see Section \ref{sec:CLM}, for example). 
 If we want to make an estimate of the magnitude of random error, which is needed for a hypothesis test, we need to be sure that the the appropriate random error is reflected in our measurements.
 If our observations are not in fact independent, results may be affected by the presence of systematic error.
-For example, if you wanted to compare two sludge treatments, and decided to apply one treatment in your lab and ask a friend in a different country to test the other one, you would be asking for trouble!
+For example, if you wanted to compare two sludge treatments, and decided to apply one treatment in your lab and ask a friend in a different country to test the other one, you would be asking for trouble.
 It would be nearly certain that some of the observed differences between the two samples were due to systematic errors that were laboratory-dependent.
 Statistical methods are very powerful for detecting this type of effect, but assigning it to the treatment would be a major mistake.
 
@@ -410,7 +412,7 @@ Statistical methods are very powerful for detecting this type of effect, but ass
 \label{sec:useabuse}
 Everyone knows that \textit{replication} is important in statistics.\footnote{Although it is not always required in a strict sense. For example, a repeated-measures design can be considered a two-factor analysis of variance without replication \citep{zarBiostatisticalAnalysis1999}. And when using regression, it is not necessary to have multiple replicates for each level of the response variable.}
 But it must be the right kind of replication.
-Replicating measurements on one single experimental unit that received some treatment and one single unit that did not can give you a lot of data, but you would both tend to underestimate random error and assign a likely systematic difference to your treatment!\footnote{This is related to the concept of \textit{pseudoreplication} or false replication, which has been discussed extensively \citep{hurlbertPseudoreplicationDesignEcological1984}.}
+Replicating measurements on one single experimental unit that received some treatment and one single unit that did not can give you a lot of data, but you would both tend to underestimate random error and assign a likely systematic difference to your treatment.\footnote{This is related to the concept of \textit{pseudoreplication} or false replication, which has been discussed extensively \citep{hurlbertPseudoreplicationDesignEcological1984}.}
 A statistical model alone cannot tell you about the effect of the treatment in this case, and complex fancy-sounding approaches do not solve the problem (although many try, as numerous published papers show).
 Basic principles are important!
 
@@ -540,6 +542,7 @@ But predictor variables--categorical in this case, or factors--must be converted
 
 Transformations can make non-linear responses or non-normal error distributions easy to handle.
 In some cases, true non-linear regression is a better approach, however.
+And generalized linear models can be used for different types of error distributions.
 
 \fbox{\begin{minipage}{43em}
 \begin{numbox}
@@ -551,7 +554,7 @@ In some cases, true non-linear regression is a better approach, however.
   In many cases both are needed together, conveniently.
   If this is not the case, generalized linear models are an alternative \citep{mccullaghGeneralizedLinearModels1989}.
   Predictor variables can also be transformed, giving three general types of model in addition to true ``linear'' models: log-linear, linear-log, log-log. 
-  Take care with interpretation of parameter values!
+  Take care with interpretation of parameter values.
 \end{numbox}
 \end{minipage}}
 
@@ -677,7 +680,7 @@ Let's start thinking about the questions in Section \ref{sec:questions} before w
 Are observations independent?
 No--all the blue observations are from a single wetland, for example.
 Well, is the replication the right kind then? 
-Probably not, but it depends on the question we want to answer!
+Probably not, but it depends on the question we want to answer.
 Presumably we are interested in whether ammonia removal differs between the two species \textit{in general}.
 That is, our hypothetical population is a bunch of similar constructed wetlands with one of these two species.
 But to answer this question using inferential statistics, we would need multiple replicated \textit{wetlands} for each species!
@@ -686,7 +689,7 @@ If we proceeded to apply a statistical model here we would really be comparing t
 Could we be sure that any difference is due to the plants and not some other difference between the two wetlands, e.g., retention time, some other plants, degree of aeration?
 Probably not.
 
-Unfortunately this situation may be unavoidable when it is difficult or expensive to create or treat some unit of observation--think about pilot-scale reactors, for example!
+Unfortunately this situation may be unavoidable when it is difficult or expensive to create or treat some unit of observation--think about pilot-scale reactors, for example.
 We do have the option of assuming that the plants are the main cause of differences between these two wetlands, but such a decision should be supported.
 This could be done by e.g., running the wetlands in parallel for some time before adding plants, to show there is no difference.
 Or, evidence could also come from other studies that show small variability among replicate wetlands.
@@ -892,7 +895,7 @@ confint(mod1)
 @
 
 We can say then, that at the 95\% confidence, any difference between the methods is probably smaller than 17\%, with the exception of ethanol.
-That is useful!
+That is useful.
 If we want more information or a better estimate of any probable difference between the methods, we would need to carry out additional experiments.
 For this new method, this is precisely what was later done, with comparisons made within and even among other laboratories, with measurements made by differenet technicians \citep{justesenDevelopmentValidationLowcost2019}.
 
@@ -1017,7 +1020,7 @@ ggplot(et, aes(por.g, log10(emis.n), colour = factor(temp.c))) +
   theme(legend.position = 'top')
 @
 
-There is very clear correlation and we should include it!
+There is very clear correlation and we should include it.
 
 <<>>=
 mod2 <- lm(log10(emis.n) ~ temp.c + log10(speed) + por.g, data = et)
